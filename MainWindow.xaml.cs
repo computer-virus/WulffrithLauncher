@@ -51,6 +51,7 @@ namespace WulffrithLauncher {
 			}
 
 			// Load File Datas
+			// Current Indexing System Based On File Names
 			_fileDatas = new string[_files.Length][];
 			for (int i = 0; i < _files.Length; i++) {
 				string[] lines = File.ReadAllLines(_files[i]);
@@ -76,6 +77,12 @@ namespace WulffrithLauncher {
 			}
 		}
 
+		// Closes application when unfocused
+		void OnUnfocus(object sender, EventArgs e) {
+			Environment.Exit(0);
+		}
+
+		// Creates example file with format reference
 		private static void CreateExampleFile(string file) {
 			MyLib.File.WriteAllLines(file, [
 				"Application Name > Example App",
@@ -86,6 +93,7 @@ namespace WulffrithLauncher {
 			]);
 		}
 
+		// Gets all file locations excluding the example file
 		private static string[] GetNonExampleFiles(string folder, string exampleFile) {
 			if (File.Exists(exampleFile)) {
 				File.Delete(exampleFile);

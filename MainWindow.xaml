@@ -13,7 +13,8 @@
 		WindowStyle="None"
 		AllowsTransparency="True"
 		FontFamily="Tahoma"
-		Topmost="True">
+		Topmost="True"
+		Deactivated="OnUnfocus">
 
 	<Window.Resources>
 		<Style x:Key="FocusVisual">
