@@ -1,9 +1,8 @@
 ﻿<Window x:Class="WulffrithLauncher.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:WulffrithLauncher"
         mc:Ignorable="d"
         Title="Wulffrith Launcher"
 		Height="500"
@@ -16,354 +15,392 @@
 		Topmost="True"
 		Deactivated="OnUnfocus">
 
-	<Window.Resources>
-		<Style x:Key="FocusVisual">
-			<Setter Property="Control.Template">
-				<Setter.Value>
-					<ControlTemplate>
-						<Rectangle Margin="2" StrokeDashArray="1 2" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" SnapsToDevicePixels="true" StrokeThickness="1"/>
-					</ControlTemplate>
-				</Setter.Value>
-			</Setter>
-		</Style>
-		<SolidColorBrush x:Key="Button.Static.Background" Color="#0fff"/>
-		<SolidColorBrush x:Key="Button.Static.Border" Color="#fff"/>
-		<SolidColorBrush x:Key="Button.Static.Foreground" Color="#fff"/>
-		<SolidColorBrush x:Key="Button.MouseOver.Background" Color="#2fff"/>
-		<SolidColorBrush x:Key="Button.MouseOver.Border" Color="#fff"/>
-		<SolidColorBrush x:Key="Button.Pressed.Background" Color="#3fff"/>
-		<SolidColorBrush x:Key="Button.Pressed.Border" Color="#fff"/>
-		<SolidColorBrush x:Key="Button.Disabled.Background" Color="#0fff"/>
-		<SolidColorBrush x:Key="Button.Disabled.Border" Color="#222"/>
-		<SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#222"/>
-		<Style TargetType="{x:Type Button}">
-			<Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
-			<Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
-			<Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
-			<Setter Property="Foreground" Value="{StaticResource Button.Static.Foreground}"/>
-			<Setter Property="BorderThickness" Value="1"/>
-			<Setter Property="HorizontalContentAlignment" Value="Center"/>
-			<Setter Property="VerticalContentAlignment" Value="Center"/>
-			<Setter Property="Padding" Value="1"/>
-			<Setter Property="Template">
-				<Setter.Value>
-					<ControlTemplate TargetType="{x:Type ButtonBase}">
-						<Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="true">
-							<ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-						</Border>
-						<ControlTemplate.Triggers>
-							<Trigger Property="Button.IsDefaulted" Value="true">
-								<Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
-							</Trigger>
-							<Trigger Property="IsMouseOver" Value="true">
-								<Setter Property="Background" TargetName="border" Value="{StaticResource Button.MouseOver.Background}"/>
-								<Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.MouseOver.Border}"/>
-							</Trigger>
-							<Trigger Property="IsPressed" Value="true">
-								<Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.Background}"/>
-								<Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.Border}"/>
-							</Trigger>
-							<Trigger Property="IsEnabled" Value="false">
-								<Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
-								<Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Disabled.Border}"/>
-								<Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.Disabled.Foreground}"/>
-							</Trigger>
-						</ControlTemplate.Triggers>
-					</ControlTemplate>
-				</Setter.Value>
-			</Setter>
-		</Style>
-	</Window.Resources>
-
 	<WindowChrome.WindowChrome>
-		<WindowChrome GlassFrameThickness="0" CornerRadius="20" CaptionHeight="0"/>
+		<WindowChrome x:Name="wndChrmWindowCornerRadius" GlassFrameThickness="0" CornerRadius="20" CaptionHeight="0"/> <!-- Window Border Radius And Title Bar Removal -->
 	</WindowChrome.WindowChrome>
 
-	<Grid Margin="15">
+	<!-- Container Grid -->
+	<Grid x:Name="gridContainer">
+		<!-- Columns and Rows To Simulate App Margins -->
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="15*"/> <!-- Margin Col, Unused -->
+			<ColumnDefinition Width="950*"/>
+			<ColumnDefinition Width="15*"/> <!-- Margin Col, Unused -->
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="15*"/> <!-- Margin Row, Unused -->
+			<RowDefinition Height="470*"/>
+			<RowDefinition Height="15*"/> <!-- Margin Row, Unused -->
+		</Grid.RowDefinitions>
+
 		<!-- Error Message -->
-		<TextBlock x:Name="txtErrorMessage" Text="" FontSize="11" FontFamily="Cascadia Code" Foreground="#f00"/>
+		<TextBlock Grid.Column="1" Grid.Row="1" x:Name="txtErrorMessage" Text="" FontSize="11" FontFamily="Cascadia Code" Foreground="#f00"/>
 
-		<Grid x:Name="gridMain">
-			<Grid.RowDefinitions>
-				<RowDefinition Height="1*"/>
-				<RowDefinition Height="1*"/>
-				<RowDefinition Height="1*"/>
-			</Grid.RowDefinitions>
+		<!-- Icon Grid System -->
+		<!-- Starts With Large Grid -->
+		<!-- Each Valid Section Of Large Grid Gets Split Into Medium Grids -->
+		<!-- Each Valid Section Of Medium Grids Get Split Into Small Grids -->
+		<!-- Margins Should Not Surpass 10*-->
+		<Grid x:Name="gridLarge" Grid.Column="1" Grid.Row="1">
 			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="1*"/>
-				<ColumnDefinition Width="1*"/>
-				<ColumnDefinition Width="1*"/>
+				<ColumnDefinition Width="310*"/>
+				<ColumnDefinition Width="10*"/> <!-- Margin Col, Unused -->
+				<ColumnDefinition Width="310*"/>
+				<ColumnDefinition Width="10*"/> <!-- Margin Col, Unused -->
+				<ColumnDefinition Width="310*"/>
 			</Grid.ColumnDefinitions>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="150*"/>
+				<RowDefinition Height="10*"/> <!-- Margin Row, Unused -->
+				<RowDefinition Height="150*"/>
+				<RowDefinition Height="10*"/> <!-- Margin Row, Unused -->
+				<RowDefinition Height="150*"/>
+			</Grid.RowDefinitions>
 
-			<!-- Section 0 -->
-			<Grid Grid.Row="0" Grid.Column="0" x:Name="sect_0">
+			<!-- Medium Grid 0 -->
+			<Grid Grid.Row="0" Grid.Column="0" x:Name="gridMedium0">
 				<Grid.ColumnDefinitions>
-					<ColumnDefinition Width="1*"/>
-					<ColumnDefinition Width="1*"/>
+					<ColumnDefinition Width="150*"/>
+					<ColumnDefinition Width="10*"/> <!-- Margin Column, Unused -->
+					<ColumnDefinition Width="150*"/>
 				</Grid.ColumnDefinitions>
 
-				<Grid Grid.Column="0" x:Name="sect_0_0">
-					<Grid.RowDefinitions>
-						<RowDefinition Height="1*"/>
-						<RowDefinition Height="1*"/>
-					</Grid.RowDefinitions>
+				<!-- Small Grid 0 -->
+				<Grid Grid.Column="0" x:Name="gridSmall00">
 					<Grid.ColumnDefinitions>
-						<ColumnDefinition Width="1*"/>
-						<ColumnDefinition Width="1*"/>
+						<ColumnDefinition Width="70*"/>
+						<ColumnDefinition Width="10*"/> <!-- Margin Column, Unused -->
+						<ColumnDefinition Width="70*"/>
 					</Grid.ColumnDefinitions>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="70*"/>
+						<RowDefinition Height="10*"/> <!-- Margin Row, Unused -->
+						<RowDefinition Height="70*"/>
+					</Grid.RowDefinitions>
 				</Grid>
 
-				<Grid Grid.Column="1" x:Name="sect_0_1">
-					<Grid.RowDefinitions>
-						<RowDefinition Height="1*"/>
-						<RowDefinition Height="1*"/>
-					</Grid.RowDefinitions>
+				<!-- Small Grid 1 -->
+				<Grid Grid.Column="2" x:Name="gridSmall01">
 					<Grid.ColumnDefinitions>
-						<ColumnDefinition Width="1*"/>
-						<ColumnDefinition Width="1*"/>
+						<ColumnDefinition Width="70*"/>
+						<ColumnDefinition Width="10*"/> <!-- Margin Column, Unused -->
+						<ColumnDefinition Width="70*"/>
 					</Grid.ColumnDefinitions>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="70*"/>
+						<RowDefinition Height="10*"/> <!-- Margin Row, Unused -->
+						<RowDefinition Height="70*"/>
+					</Grid.RowDefinitions>
 				</Grid>
+
 			</Grid>
 
-			<!-- Section 1 -->
-			<Grid Grid.Row="0" Grid.Column="1" x:Name="sect_1">
+			<!-- Medium Grid 1 -->
+			<Grid Grid.Row="0" Grid.Column="2" x:Name="gridMedium1">
 				<Grid.ColumnDefinitions>
-					<ColumnDefinition Width="1*"/>
-					<ColumnDefinition Width="1*"/>
+					<ColumnDefinition Width="150*"/>
+					<ColumnDefinition Width="10*"/>	<!-- Margin Column, Unused -->
+					<ColumnDefinition Width="150*"/>
 				</Grid.ColumnDefinitions>
 
-				<Grid Grid.Column="0" x:Name="sect_1_0">
-					<Grid.RowDefinitions>
-						<RowDefinition Height="1*"/>
-						<RowDefinition Height="1*"/>
-					</Grid.RowDefinitions>
+				<!-- Small Grid 0 -->
+				<Grid Grid.Column="0" x:Name="gridSmall10">
 					<Grid.ColumnDefinitions>
-						<ColumnDefinition Width="1*"/>
-						<ColumnDefinition Width="1*"/>
+						<ColumnDefinition Width="70*"/>
+						<ColumnDefinition Width="10*"/> <!-- Margin Column, Unused -->
+						<ColumnDefinition Width="70*"/>
 					</Grid.ColumnDefinitions>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="70*"/>
+						<RowDefinition Height="10*"/> <!-- Margin Row, Unused -->
+						<RowDefinition Height="70*"/>
+					</Grid.RowDefinitions>
 				</Grid>
 
-				<Grid Grid.Column="1" x:Name="sect_1_1">
-					<Grid.RowDefinitions>
-						<RowDefinition Height="1*"/>
-						<RowDefinition Height="1*"/>
-					</Grid.RowDefinitions>
+				<!-- Small Grid 1 -->
+				<Grid Grid.Column="2" x:Name="gridSmall11">
 					<Grid.ColumnDefinitions>
-						<ColumnDefinition Width="1*"/>
-						<ColumnDefinition Width="1*"/>
+						<ColumnDefinition Width="70*"/>
+						<ColumnDefinition Width="10*"/> <!-- Margin Column, Unused -->
+						<ColumnDefinition Width="70*"/>
 					</Grid.ColumnDefinitions>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="70*"/>
+						<RowDefinition Height="10*"/> <!-- Margin Row, Unused -->
+						<RowDefinition Height="70*"/>
+					</Grid.RowDefinitions>
 				</Grid>
+
 			</Grid>
 
-			<!-- Section 2 -->
-			<Grid Grid.Row="0" Grid.Column="2" x:Name="sect_2">
+			<!-- Medium Grid 2 -->
+			<Grid Grid.Row="0" Grid.Column="4" x:Name="gridMedium2">
 				<Grid.ColumnDefinitions>
-					<ColumnDefinition Width="1*"/>
-					<ColumnDefinition Width="1*"/>
+					<ColumnDefinition Width="150*"/>
+					<ColumnDefinition Width="10*"/>	<!-- Margin Column, Unused -->
+					<ColumnDefinition Width="150*"/>
 				</Grid.ColumnDefinitions>
 
-				<Grid Grid.Column="0" x:Name="sect_2_0">
-					<Grid.RowDefinitions>
-						<RowDefinition Height="1*"/>
-						<RowDefinition Height="1*"/>
-					</Grid.RowDefinitions>
+				<!-- Small Grid 0 -->
+				<Grid Grid.Column="0" x:Name="gridSmall20">
 					<Grid.ColumnDefinitions>
-						<ColumnDefinition Width="1*"/>
-						<ColumnDefinition Width="1*"/>
+						<ColumnDefinition Width="70*"/>
+						<ColumnDefinition Width="10*"/>	<!-- Margin Column, Unused -->
+						<ColumnDefinition Width="70*"/>
 					</Grid.ColumnDefinitions>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="70*"/>
+						<RowDefinition Height="10*"/> <!-- Margin Row, Unused -->
+						<RowDefinition Height="70*"/>
+					</Grid.RowDefinitions>
 				</Grid>
 
-				<Grid Grid.Column="1" x:Name="sect_2_1">
-					<Grid.RowDefinitions>
-						<RowDefinition Height="1*"/>
-						<RowDefinition Height="1*"/>
-					</Grid.RowDefinitions>
+				<!-- Small Grid 1 -->
+				<Grid Grid.Column="2" x:Name="gridSmall21">
 					<Grid.ColumnDefinitions>
-						<ColumnDefinition Width="1*"/>
-						<ColumnDefinition Width="1*"/>
+						<ColumnDefinition Width="70*"/>
+						<ColumnDefinition Width="10*"/>	<!-- Margin Column, Unused -->
+						<ColumnDefinition Width="70*"/>
 					</Grid.ColumnDefinitions>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="70*"/>
+						<RowDefinition Height="10*"/> <!-- Margin Row, Unused -->
+						<RowDefinition Height="70*"/>
+					</Grid.RowDefinitions>
 				</Grid>
+
 			</Grid>
 
-			<!-- Section 3 -->
-			<Grid Grid.Row="1" Grid.Column="0" x:Name="sect_3">
+			<!-- Medium Grid 3 -->
+			<Grid Grid.Row="2" Grid.Column="0" x:Name="gridMedium3">
 				<Grid.ColumnDefinitions>
-					<ColumnDefinition Width="1*"/>
-					<ColumnDefinition Width="1*"/>
+					<ColumnDefinition Width="150*"/>
+					<ColumnDefinition Width="10*"/>	<!-- Margin Column, Unused -->
+					<ColumnDefinition Width="150*"/>
 				</Grid.ColumnDefinitions>
 
-				<Grid Grid.Column="0" x:Name="sect_3_0">
-					<Grid.RowDefinitions>
-						<RowDefinition Height="1*"/>
-						<RowDefinition Height="1*"/>
-					</Grid.RowDefinitions>
+				<!-- Small Grid 0 -->
+				<Grid Grid.Column="0" x:Name="gridSmall30">
 					<Grid.ColumnDefinitions>
-						<ColumnDefinition Width="1*"/>
-						<ColumnDefinition Width="1*"/>
+						<ColumnDefinition Width="70*"/>
+						<ColumnDefinition Width="10*"/>	<!-- Margin Column, Unused -->
+						<ColumnDefinition Width="70*"/>
 					</Grid.ColumnDefinitions>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="70*"/>
+						<RowDefinition Height="10*"/> <!-- Margin Row, Unused -->
+						<RowDefinition Height="70*"/>
+					</Grid.RowDefinitions>
 				</Grid>
 
-				<Grid Grid.Column="1" x:Name="sect_3_1">
-					<Grid.RowDefinitions>
-						<RowDefinition Height="1*"/>
-						<RowDefinition Height="1*"/>
-					</Grid.RowDefinitions>
+				<!-- Small Grid 1 -->
+				<Grid Grid.Column="2" x:Name="gridSmall31">
 					<Grid.ColumnDefinitions>
-						<ColumnDefinition Width="1*"/>
-						<ColumnDefinition Width="1*"/>
+						<ColumnDefinition Width="70*"/>
+						<ColumnDefinition Width="10*"/>	<!-- Margin Column, Unused -->
+						<ColumnDefinition Width="70*"/>
 					</Grid.ColumnDefinitions>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="70*"/>
+						<RowDefinition Height="10*"/> <!-- Margin Row, Unused -->
+						<RowDefinition Height="70*"/>
+					</Grid.RowDefinitions>
 				</Grid>
+
 			</Grid>
 
-			<!-- Section 4 -->
-			<Grid Grid.Row="1" Grid.Column="1" x:Name="sect_4">
+			<!-- Medium Grid 4 -->
+			<Grid Grid.Row="2" Grid.Column="2" x:Name="gridMedium4">
 				<Grid.ColumnDefinitions>
-					<ColumnDefinition Width="1*"/>
-					<ColumnDefinition Width="1*"/>
+					<ColumnDefinition Width="150*"/>
+					<ColumnDefinition Width="10*"/> <!-- Margin Column, Unused -->
+					<ColumnDefinition Width="150*"/>
 				</Grid.ColumnDefinitions>
 
-				<Grid Grid.Column="0" x:Name="sect_4_0">
-					<Grid.RowDefinitions>
-						<RowDefinition Height="1*"/>
-						<RowDefinition Height="1*"/>
-					</Grid.RowDefinitions>
+				<!-- Small Grid 0 -->
+				<Grid Grid.Column="0" x:Name="gridSmall40">
 					<Grid.ColumnDefinitions>
-						<ColumnDefinition Width="1*"/>
-						<ColumnDefinition Width="1*"/>
+						<ColumnDefinition Width="70*"/>
+						<ColumnDefinition Width="10*"/> <!-- Margin Column, Unused -->
+						<ColumnDefinition Width="70*"/>
 					</Grid.ColumnDefinitions>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="70*"/>
+						<RowDefinition Height="10*"/> <!-- Margin Row, Unused -->
+						<RowDefinition Height="70*"/>
+					</Grid.RowDefinitions>
 				</Grid>
 
-				<Grid Grid.Column="1" x:Name="sect_4_1">
-					<Grid.RowDefinitions>
-						<RowDefinition Height="1*"/>
-						<RowDefinition Height="1*"/>
-					</Grid.RowDefinitions>
+				<!-- Small Grid 1 -->
+				<Grid Grid.Column="2" x:Name="gridSmall41">
 					<Grid.ColumnDefinitions>
-						<ColumnDefinition Width="1*"/>
-						<ColumnDefinition Width="1*"/>
+						<ColumnDefinition Width="70*"/>
+						<ColumnDefinition Width="10*"/> <!-- Margin Column, Unused -->
+						<ColumnDefinition Width="70*"/>
 					</Grid.ColumnDefinitions>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="70*"/>
+						<RowDefinition Height="10*"/> <!-- Margin Row, Unused -->
+						<RowDefinition Height="70*"/>
+					</Grid.RowDefinitions>
 				</Grid>
+
 			</Grid>
 
-			<!-- Section 5 -->
-			<Grid Grid.Row="1" Grid.Column="2" x:Name="sect_5">
+			<!-- Medium Grid 5 -->
+			<Grid Grid.Row="2" Grid.Column="4" x:Name="gridMedium5">
 				<Grid.ColumnDefinitions>
-					<ColumnDefinition Width="1*"/>
-					<ColumnDefinition Width="1*"/>
+					<ColumnDefinition Width="150*"/>
+					<ColumnDefinition Width="10*"/> <!-- Margin Column, Unused -->
+					<ColumnDefinition Width="150*"/>
 				</Grid.ColumnDefinitions>
 
-				<Grid Grid.Column="0" x:Name="sect_5_0">
-					<Grid.RowDefinitions>
-						<RowDefinition Height="1*"/>
-						<RowDefinition Height="1*"/>
-					</Grid.RowDefinitions>
+				<!-- Small Grid 0 -->
+				<Grid Grid.Column="0" x:Name="gridSmall50">
 					<Grid.ColumnDefinitions>
-						<ColumnDefinition Width="1*"/>
-						<ColumnDefinition Width="1*"/>
+						<ColumnDefinition Width="70*"/>
+						<ColumnDefinition Width="10*"/> <!-- Margin Column, Unused -->
+						<ColumnDefinition Width="70*"/>
 					</Grid.ColumnDefinitions>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="70*"/>
+						<RowDefinition Height="10*"/> <!-- Margin Row, Unused -->
+						<RowDefinition Height="70*"/>
+					</Grid.RowDefinitions>
 				</Grid>
 
-				<Grid Grid.Column="1" x:Name="sect_5_1">
-					<Grid.RowDefinitions>
-						<RowDefinition Height="1*"/>
-						<RowDefinition Height="1*"/>
-					</Grid.RowDefinitions>
+				<!-- Small Grid 1 -->
+				<Grid Grid.Column="2" x:Name="gridSmall51">
 					<Grid.ColumnDefinitions>
-						<ColumnDefinition Width="1*"/>
-						<ColumnDefinition Width="1*"/>
+						<ColumnDefinition Width="70*"/>
+						<ColumnDefinition Width="10*"/> <!-- Margin Column, Unused -->
+						<ColumnDefinition Width="70*"/>
 					</Grid.ColumnDefinitions>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="70*"/>
+						<RowDefinition Height="10*"/> <!-- Margin Row, Unused -->
+						<RowDefinition Height="70*"/>
+					</Grid.RowDefinitions>
 				</Grid>
+
 			</Grid>
 
-			<!-- Section 6 -->
-			<Grid Grid.Row="2" Grid.Column="0" x:Name="sect_6">
+			<!-- Medium Grid 6 -->
+			<Grid Grid.Row="4" Grid.Column="0" x:Name="gridMedium6">
 				<Grid.ColumnDefinitions>
-					<ColumnDefinition Width="1*"/>
-					<ColumnDefinition Width="1*"/>
+					<ColumnDefinition Width="150*"/>
+					<ColumnDefinition Width="10*"/> <!-- Margin Column, Unused -->
+					<ColumnDefinition Width="150*"/>
 				</Grid.ColumnDefinitions>
 
-				<Grid Grid.Column="0" x:Name="sect_6_0">
-					<Grid.RowDefinitions>
-						<RowDefinition Height="1*"/>
-						<RowDefinition Height="1*"/>
-					</Grid.RowDefinitions>
+				<!-- Small Grid 0 -->
+				<Grid Grid.Column="0" x:Name="gridSmall60">
 					<Grid.ColumnDefinitions>
-						<ColumnDefinition Width="1*"/>
-						<ColumnDefinition Width="1*"/>
+						<ColumnDefinition Width="70*"/>
+						<ColumnDefinition Width="10*"/> <!-- Margin Column, Unused -->
+						<ColumnDefinition Width="70*"/>
 					</Grid.ColumnDefinitions>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="70*"/>
+						<RowDefinition Height="10*"/> <!-- Margin Row, Unused -->
+						<RowDefinition Height="70*"/>
+					</Grid.RowDefinitions>
 				</Grid>
 
-				<Grid Grid.Column="1" x:Name="sect_6_1">
-					<Grid.RowDefinitions>
-						<RowDefinition Height="1*"/>
-						<RowDefinition Height="1*"/>
-					</Grid.RowDefinitions>
+				<!-- Small Grid 1 -->
+				<Grid Grid.Column="2" x:Name="gridSmall61">
 					<Grid.ColumnDefinitions>
-						<ColumnDefinition Width="1*"/>
-						<ColumnDefinition Width="1*"/>
+						<ColumnDefinition Width="70*"/>
+						<ColumnDefinition Width="10*"/> <!-- Margin Column, Unused -->
+						<ColumnDefinition Width="70*"/>
 					</Grid.ColumnDefinitions>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="70*"/>
+						<RowDefinition Height="10*"/> <!-- Margin Row, Unused -->
+						<RowDefinition Height="70*"/>
+					</Grid.RowDefinitions>
 				</Grid>
+
 			</Grid>
 
-			<!-- Section 7 -->
-			<Grid Grid.Row="2" Grid.Column="1" x:Name="sect_7">
+			<!-- Medium Grid 7 -->
+			<Grid Grid.Row="4" Grid.Column="2" x:Name="gridMedium7">
 				<Grid.ColumnDefinitions>
-					<ColumnDefinition Width="1*"/>
-					<ColumnDefinition Width="1*"/>
+					<ColumnDefinition Width="150*"/>
+					<ColumnDefinition Width="10*"/> <!-- Margin Column, Unused -->
+					<ColumnDefinition Width="150*"/>
 				</Grid.ColumnDefinitions>
 
-				<Grid Grid.Column="0" x:Name="sect_7_0">
-					<Grid.RowDefinitions>
-						<RowDefinition Height="1*"/>
-						<RowDefinition Height="1*"/>
-					</Grid.RowDefinitions>
+				<!-- Small Grid 0 -->
+				<Grid Grid.Column="0" x:Name="gridSmall70">
 					<Grid.ColumnDefinitions>
-						<ColumnDefinition Width="1*"/>
-						<ColumnDefinition Width="1*"/>
+						<ColumnDefinition Width="70*"/>
+						<ColumnDefinition Width="10*"/> <!-- Margin Column, Unused -->
+						<ColumnDefinition Width="70*"/>
 					</Grid.ColumnDefinitions>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="70*"/>
+						<RowDefinition Height="10*"/> <!-- Margin Row, Unused -->
+						<RowDefinition Height="70*"/>
+					</Grid.RowDefinitions>
 				</Grid>
 
-				<Grid Grid.Column="1" x:Name="sect_7_1">
-					<Grid.RowDefinitions>
-						<RowDefinition Height="1*"/>
-						<RowDefinition Height="1*"/>
-					</Grid.RowDefinitions>
+				<!-- Small Grid 1 -->
+				<Grid Grid.Column="2" x:Name="gridSmall71">
 					<Grid.ColumnDefinitions>
-						<ColumnDefinition Width="1*"/>
-						<ColumnDefinition Width="1*"/>
+						<ColumnDefinition Width="70*"/>
+						<ColumnDefinition Width="10*"/> <!-- Margin Column, Unused -->
+						<ColumnDefinition Width="70*"/>
 					</Grid.ColumnDefinitions>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="70*"/>
+						<RowDefinition Height="10*"/> <!-- Margin Row, Unused -->
+						<RowDefinition Height="70*"/>
+					</Grid.RowDefinitions>
 				</Grid>
+
 			</Grid>
 
-			<!-- Section 8 -->
-			<Grid Grid.Row="2" Grid.Column="2" x:Name="sect_8">
+			<!-- Medium Grid 8 -->
+			<Grid Grid.Row="4" Grid.Column="4" x:Name="gridMedium8">
 				<Grid.ColumnDefinitions>
-					<ColumnDefinition Width="1*"/>
-					<ColumnDefinition Width="1*"/>
+					<ColumnDefinition Width="150*"/>
+					<ColumnDefinition Width="10*"/> <!-- Margin Column, Unused -->
+					<ColumnDefinition Width="150*"/>
 				</Grid.ColumnDefinitions>
 
-				<Grid Grid.Column="0" x:Name="sect_8_0">
-					<Grid.RowDefinitions>
-						<RowDefinition Height="1*"/>
-						<RowDefinition Height="1*"/>
-					</Grid.RowDefinitions>
+				<!-- Small Grid 0 -->
+				<Grid Grid.Column="0" x:Name="gridSmall80">
 					<Grid.ColumnDefinitions>
-						<ColumnDefinition Width="1*"/>
-						<ColumnDefinition Width="1*"/>
+						<ColumnDefinition Width="70*"/>
+						<ColumnDefinition Width="10*"/> <!-- Margin Column, Unused -->
+						<ColumnDefinition Width="70*"/>
 					</Grid.ColumnDefinitions>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="70*"/>
+						<RowDefinition Height="10*"/> <!-- Margin Row, Unused -->
+						<RowDefinition Height="70*"/>
+					</Grid.RowDefinitions>
 				</Grid>
 
-				<Grid Grid.Column="1" x:Name="sect_8_1">
-					<Grid.RowDefinitions>
-						<RowDefinition Height="1*"/>
-						<RowDefinition Height="1*"/>
-					</Grid.RowDefinitions>
+				<!-- Small Grid 1 -->
+				<Grid Grid.Column="2" x:Name="gridSmall81">
 					<Grid.ColumnDefinitions>
-						<ColumnDefinition Width="1*"/>
-						<ColumnDefinition Width="1*"/>
+						<ColumnDefinition Width="70*"/>
+						<ColumnDefinition Width="10*"/> <!-- Margin Column, Unused -->
+						<ColumnDefinition Width="70*"/>
 					</Grid.ColumnDefinitions>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="70*"/>
+						<RowDefinition Height="10*"/> <!-- Margin Row, Unused -->
+						<RowDefinition Height="70*"/>
+					</Grid.RowDefinitions>
 				</Grid>
+
 			</Grid>
+
 		</Grid>
+
 	</Grid>
+
 </Window>

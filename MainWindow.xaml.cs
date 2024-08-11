@@ -57,16 +57,21 @@ namespace WulffrithLauncher {
 			// Current Indexing System Based On File Names
 			_fileDatas = new string[_files.Length][];
 			for (int i = 0; i < _files.Length; i++) {
+				// Reads File
 				string[] lines = File.ReadAllLines(_files[i]);
 
+				// Creates Array To Hold File Datas
 				_fileDatas[i] = new string[lines.Length];
 
+				// Loads All File Datas From File
 				for (int j = 0; j < lines.Length; j++) {
 					_fileDatas[i][j] = lines[j].Split('>')[1].Trim();
 				}
 
+				// Converts Word Size To Respective Number
+				// Still in string[] so can't directly convert to int yet
+				// No default since I want to catch that later in file validation
 				switch (_fileDatas[i][2]) {
-					default:
 					case "Small":
 						_fileDatas[i][2] = "1";
 						break;

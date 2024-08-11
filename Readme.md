@@ -7,16 +7,15 @@ The goal is to make the launcher work relatively closely to the Windows 10 tiled
 ### Current Implementations:
 - Semi-Transparent Background
 - Always Topmost Window
-- Simple Grid System For the UI
 - Directory For App Data Storage
 - Loading Data From Files Into Temporary Memory
 - Warns User When Directory Is Empty
 - Launcher Window Is Fixed To Requested Location
 - Automatically Closes When Unfocused
-- Changed launcher window scaling to be adaptive to screen size
+- Launcher window scaling to be adaptive to screen size
+- Grid System That's Accurate To Given Margins
 
 ### Planned Implementations (Bare Minimum):
-- Implement A Better Grid System That Can More Accurately Match The Purposed Margins
 - Error Checking For Invalid File Format And Warn User
 - Load Image Data From Directory Into Temporary Storage
 - Use App Data And Image Data To Create Icons On The Grid System
