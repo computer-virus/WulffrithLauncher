@@ -15,6 +15,7 @@ The goal is to make the launcher work relatively closely to the Windows 10 tiled
 - Automatically Closes When Unfocused
 
 ### Planned Implementations (Bare Minimum):
+- Change launcher window scaling to be adaptive to screen size
 - Implement A Better Grid System That Can More Accurately Match The Purposed Margins
 - Error Checking For Invalid File Format And Warn User
 - Load Image Data From Directory Into Temporary Storage
@@ -22,6 +23,7 @@ The goal is to make the launcher work relatively closely to the Windows 10 tiled
 - Launch Application When Corresponding Icon Is Clicked
 
 ### Possible Future Implementations (If I Can Manage It):
+- Add manual launcher window scaling through in-app menu
 - Improved Indexing System And Allow Users To Drag Icons To Change App Indexes
 - Implement Acrylic Brush Into WPF For Launcher Background
 - Allow User To Modify App Data and Image Data By Right-Clicking Icon
