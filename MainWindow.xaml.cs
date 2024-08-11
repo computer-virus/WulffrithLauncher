@@ -1,14 +1,5 @@
 ﻿using System.IO;
-using System.Text;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using MyLibrary;
 
 namespace WulffrithLauncher {
@@ -19,14 +10,11 @@ namespace WulffrithLauncher {
 
 		private const string APP_FOLDER = "apps";
 		private const string EXAMPLE_FILE = $@"{APP_FOLDER}\## - ExampleApplication.appdata";
-
 		private const string IMG_FOLDER = $@"{APP_FOLDER}\images";
 
 		private string[] _files;
-
 		private string[][] _fileDatas;
-
-		private const int MAX_SUM_FILE_SIZE_PER_SECTION = 8;
+		private string[] _imgFiles;
 
 		public MainWindow() {
 			// Standard Component Initialization
@@ -54,39 +42,14 @@ namespace WulffrithLauncher {
 			}
 
 			// Load File Datas
-			// Current Indexing System Based On File Names
-			_fileDatas = new string[_files.Length][];
-			for (int i = 0; i < _files.Length; i++) {
-				// Reads File
-				string[] lines = File.ReadAllLines(_files[i]);
+			_fileDatas = LoadFileDatas(_files);
 
-				// Creates Array To Hold File Datas
-				_fileDatas[i] = new string[lines.Length];
-
-				// Loads All File Datas From File
-				for (int j = 0; j < lines.Length; j++) {
-					_fileDatas[i][j] = lines[j].Split('>')[1].Trim();
-				}
-
-				// Converts Word Size To Respective Number
-				// Still in string[] so can't directly convert to int yet
-				// No default since I want to catch that later in file validation
-				switch (_fileDatas[i][2]) {
-					case "Small":
-						_fileDatas[i][2] = "1";
-						break;
-					case "Medium":
-						_fileDatas[i][2] = "4";
-						break;
-					case "Large":
-						_fileDatas[i][2] = "8";
-						break;
-				}
-			}
+			// Get Images From Image Directory
+			_imgFiles = Directory.GetFiles(IMG_FOLDER);
 		}
 
 		// Closes application when unfocused
-		void OnUnfocus(object sender, EventArgs e) {
+		private void OnUnfocus(object sender, EventArgs e) {
 			Environment.Exit(0);
 		}
 
@@ -112,6 +75,42 @@ namespace WulffrithLauncher {
 			CreateExampleFile(exampleFile);
 
 			return files;
+		}
+
+		// Loads File Datas
+		private static string[][] LoadFileDatas(string[] files) {
+			// Current Indexing System Based On File Names
+			string[][] fileDatas = new string[files.Length][];
+			for (int i = 0; i < files.Length; i++) {
+				// Reads File
+				string[] lines = File.ReadAllLines(files[i]);
+
+				// Creates Array To Hold File Datas
+				fileDatas[i] = new string[lines.Length];
+
+				// Loads All File Datas From File
+				for (int j = 0; j < lines.Length; j++) {
+					fileDatas[i][j] = lines[j].Split('>')[1].Trim();
+				}
+
+				// Converts Word Size To Respective Number
+				// Still in string[] so can't directly convert to int yet
+				// No default since I want to catch that later in file validation
+				switch (fileDatas[i][2]) {
+					case "Small":
+						fileDatas[i][2] = "1";
+						break;
+					case "Medium":
+						fileDatas[i][2] = "4";
+						break;
+					case "Large":
+						fileDatas[i][2] = "8";
+						break;
+				}
+			}
+
+			// Returns FileDatas
+			return fileDatas;
 		}
 	}
 }

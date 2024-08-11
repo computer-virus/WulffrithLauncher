@@ -14,10 +14,10 @@ The goal is to make the launcher work relatively closely to the Windows 10 tiled
 - Automatically Closes When Unfocused
 - Launcher window scaling to be adaptive to screen size
 - Grid System That's Accurate To Given Margins
+- Loading Image Data From Directory Into Temporary Storage
 
 ### Planned Implementations (Bare Minimum):
 - Error Checking For Invalid File Format And Warn User
-- Load Image Data From Directory Into Temporary Storage
 - Use App Data And Image Data To Create Icons On The Grid System
 - Launch Application When Corresponding Icon Is Clicked
 
