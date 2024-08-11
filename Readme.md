@@ -13,9 +13,9 @@ The goal is to make the launcher work relatively closely to the Windows 10 tiled
 - Warns User When Directory Is Empty
 - Launcher Window Is Fixed To Requested Location
 - Automatically Closes When Unfocused
+- Changed launcher window scaling to be adaptive to screen size
 
 ### Planned Implementations (Bare Minimum):
-- Change launcher window scaling to be adaptive to screen size
 - Implement A Better Grid System That Can More Accurately Match The Purposed Margins
 - Error Checking For Invalid File Format And Warn User
 - Load Image Data From Directory Into Temporary Storage

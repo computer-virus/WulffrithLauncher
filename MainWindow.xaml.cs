@@ -32,10 +32,13 @@ namespace WulffrithLauncher {
 			// Standard Component Initialization
 			InitializeComponent();
 
+			// Dynamic Window Scaling and Positioning
 			double screenHeight = SystemParameters.PrimaryScreenHeight;
 			double screenWidth = SystemParameters.PrimaryScreenWidth;
-			Left = (screenWidth / 2) - (this.Width / 2);
-			Top = screenHeight - this.Height - 48;
+			Width = Math.Min(screenWidth * 0.4, 980);
+			Height = Math.Min(screenHeight * 0.35, 500);
+			Left = (screenWidth / 2) - (Width / 2);
+			Top = screenHeight - Height - 48;
 
 			// Directory Creation
 			Directory.CreateDirectory(IMG_FOLDER);
