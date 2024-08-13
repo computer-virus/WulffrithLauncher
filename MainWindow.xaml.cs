@@ -11,6 +11,7 @@ namespace WulffrithLauncher {
 		private const string APP_FOLDER = "apps";
 		private const string EXAMPLE_FILE = $@"{APP_FOLDER}\## - ExampleApplication.appdata";
 		private const string IMG_FOLDER = $@"{APP_FOLDER}\images";
+		private const int MAX_FILE_SIZE_COUNT = 72;
 
 		private string[] _files;
 		private string[][] _fileDatas;
@@ -46,6 +47,9 @@ namespace WulffrithLauncher {
 
 			// Get Images From Image Directory
 			_imgFiles = Directory.GetFiles(IMG_FOLDER);
+
+			int[,,] grid = new int[9, 2, 4];
+			PrepGrid(grid);
 		}
 
 		// Closes application when unfocused
@@ -95,7 +99,6 @@ namespace WulffrithLauncher {
 
 				// Converts Word Size To Respective Number
 				// Still in string[] so can't directly convert to int yet
-				// No default since I want to catch that later in file validation
 				switch (fileDatas[i][2]) {
 					case "Small":
 						fileDatas[i][2] = "1";
@@ -106,11 +109,25 @@ namespace WulffrithLauncher {
 					case "Large":
 						fileDatas[i][2] = "8";
 						break;
+					default:
+						fileDatas[i][2] = "" + MAX_FILE_SIZE_COUNT + 1;
+						break;
 				}
 			}
 
 			// Returns FileDatas
 			return fileDatas;
+		}
+
+		// Fills Grid With An Unindexable Values
+		private static void PrepGrid(int[,,] grid) {
+			for (int i = 0; i < grid.GetLength(0); i++) {
+				for (int j = 0; j < grid.GetLength(1); j++) {
+					for (int k = 0; k < grid.GetLength(2); k++) {
+						grid[i, j, k] = -1;
+					}
+				}
+			}
 		}
 	}
 }
