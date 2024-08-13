@@ -28,13 +28,12 @@
 			<ColumnDefinition Width="15*"/> <!-- Margin Col, Unused -->
 		</Grid.ColumnDefinitions>
 		<Grid.RowDefinitions>
-			<RowDefinition Height="15*"/> <!-- Margin Row, Unused -->
+			<RowDefinition Height="15*"/>
+			<!-- Margin Row, Unused -->
 			<RowDefinition Height="470*"/>
-			<RowDefinition Height="15*"/> <!-- Margin Row, Unused -->
+			<RowDefinition Height="15*"/>
+			<!-- Margin Row, Unused -->
 		</Grid.RowDefinitions>
-
-		<!-- Error Message -->
-		<TextBlock Grid.Column="1" Grid.Row="1" x:Name="txtErrorMessage" Text="" FontSize="11" FontFamily="Cascadia Code" Foreground="#f00"/>
 
 		<!-- Icon Grid System -->
 		<!-- Starts With Large Grid -->
@@ -400,6 +399,9 @@
 			</Grid>
 
 		</Grid>
+
+		<!-- Error Message -->
+		<TextBlock Grid.Column="1" Grid.Row="1" x:Name="txtErrorMessage" Text="" FontSize="24" FontFamily="Cascadia Code" Foreground="#f00"/>
 
 	</Grid>
 

@@ -11,7 +11,7 @@ namespace WulffrithLauncher {
 		private const string APP_FOLDER = "apps";
 		private const string EXAMPLE_FILE = $@"{APP_FOLDER}\## - ExampleApplication.appdata";
 		private const string IMG_FOLDER = $@"{APP_FOLDER}\images";
-		private const int MAX_FILE_SIZE_COUNT = 72;
+		private const int MAX_FILE_SIZE_COUNT = 9 * 8;
 
 		private string[] _files;
 		private string[][] _fileDatas;
@@ -43,13 +43,19 @@ namespace WulffrithLauncher {
 			}
 
 			// Load File Datas
-			_fileDatas = LoadFileDatas(_files);
+			_fileDatas = LoadFileDatas(_files, out bool fileSizesValid);
 
-			// Get Images From Image Directory
-			_imgFiles = Directory.GetFiles(IMG_FOLDER);
+			// Check For File Size Validation
+			if (!fileSizesValid) {
+				txtErrorMessage.Text = "One or more files have an invalid size.";
+				_imgFiles = [];
+			} else {
+				// Get Images From Image Directory
+				_imgFiles = Directory.GetFiles(IMG_FOLDER);
 
-			int[,,] grid = new int[9, 2, 4];
-			PrepGrid(grid);
+				int[,,] grid = new int[9, 2, 4];
+				PrepGrid(grid);
+			}
 		}
 
 		// Closes application when unfocused
@@ -82,7 +88,10 @@ namespace WulffrithLauncher {
 		}
 
 		// Loads File Datas
-		private static string[][] LoadFileDatas(string[] files) {
+		private static string[][] LoadFileDatas(string[] files, out bool isValid) {
+			// Count Of File Data Sizes
+			int count = 0;
+
 			// Current Indexing System Based On File Names
 			string[][] fileDatas = new string[files.Length][];
 			for (int i = 0; i < files.Length; i++) {
@@ -113,6 +122,13 @@ namespace WulffrithLauncher {
 						fileDatas[i][2] = "" + MAX_FILE_SIZE_COUNT + 1;
 						break;
 				}
+				count += int.Parse(fileDatas[i][2]);
+			}
+
+			if (count > MAX_FILE_SIZE_COUNT) {
+				isValid = false;
+			} else {
+				isValid = true;
 			}
 
 			// Returns FileDatas
