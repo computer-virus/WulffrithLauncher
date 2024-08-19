@@ -53,7 +53,7 @@ namespace WulffrithLauncher {
 				// Get Images From Image Directory
 				_imgFiles = Directory.GetFiles(IMG_FOLDER);
 
-				int[,,] grid = new int[9, 2, 4];
+				int[,] grid = new int[9, 8];
 				PrepGrid(grid);
 			}
 		}
@@ -136,12 +136,10 @@ namespace WulffrithLauncher {
 		}
 
 		// Fills Grid With An Unindexable Values
-		private static void PrepGrid(int[,,] grid) {
+		private static void PrepGrid(int[,] grid) {
 			for (int i = 0; i < grid.GetLength(0); i++) {
 				for (int j = 0; j < grid.GetLength(1); j++) {
-					for (int k = 0; k < grid.GetLength(2); k++) {
-						grid[i, j, k] = -1;
-					}
+					grid[i, j] = -1;
 				}
 			}
 		}
