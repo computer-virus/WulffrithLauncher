@@ -11,11 +11,12 @@ namespace WulffrithLauncher {
 		private const string APP_FOLDER = "apps";
 		private const string EXAMPLE_FILE = $@"{APP_FOLDER}\## - ExampleApplication.appdata";
 		private const string IMG_FOLDER = $@"{APP_FOLDER}\images";
-		private const int MAX_FILE_SIZE_COUNT = 9 * 8;
 
 		private string[] _files;
 		private string[][] _fileDatas;
 		private string[] _imgFiles;
+
+		private int[,] _grid = new int[9,8];
 
 		public MainWindow() {
 			// Standard Component Initialization
@@ -43,7 +44,7 @@ namespace WulffrithLauncher {
 			}
 
 			// Load File Datas
-			_fileDatas = LoadFileDatas(_files, out bool fileSizesValid);
+			_fileDatas = LoadFileDatas(_files, _grid, out bool fileSizesValid);
 
 			// Check For File Size Validation
 			if (!fileSizesValid) {
@@ -53,8 +54,8 @@ namespace WulffrithLauncher {
 				// Get Images From Image Directory
 				_imgFiles = Directory.GetFiles(IMG_FOLDER);
 
-				int[,] grid = new int[9, 8];
-				PrepGrid(grid);
+				// Sets all Grid Positions To Unindexed Values
+				PrepGrid(_grid);
 			}
 		}
 
@@ -88,7 +89,7 @@ namespace WulffrithLauncher {
 		}
 
 		// Loads File Datas
-		private static string[][] LoadFileDatas(string[] files, out bool isValid) {
+		private static string[][] LoadFileDatas(string[] files, int[,] grid, out bool isValid) {
 			// Count Of File Data Sizes
 			int count = 0;
 
@@ -119,13 +120,13 @@ namespace WulffrithLauncher {
 						fileDatas[i][2] = "8";
 						break;
 					default:
-						fileDatas[i][2] = "" + MAX_FILE_SIZE_COUNT + 1;
+						fileDatas[i][2] = $"{grid.GetLength(0) * grid.GetLength(1) + 1}";
 						break;
 				}
 				count += int.Parse(fileDatas[i][2]);
 			}
 
-			if (count > MAX_FILE_SIZE_COUNT) {
+			if (count > grid.GetLength(0) * grid.GetLength(1)) {
 				isValid = false;
 			} else {
 				isValid = true;
