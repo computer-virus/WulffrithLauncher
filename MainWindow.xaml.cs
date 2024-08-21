@@ -1,5 +1,4 @@
-﻿using System.Drawing;
-using System.IO;
+﻿using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -219,37 +218,24 @@ namespace WulffrithLauncher {
 				// Creates Button
 				Button btn = CreateAppIcon(fileData, size, grid, imgFolder);
 
-				// Looks For Empty Spot
-				bool done = false;
-				while (!done) {
+				// Loops Through Grid
+				IconSize step = new IconSize().Small();
+				for (int row = 0; row < gridHeight; row += step.Height + 1) {
+					bool done = false;
+					for (int col = 0; col < gridWidth && !done; col += step.Width + 1) {
+						// Sets Grid To Current Position
+						Grid.SetRow(btn, row);
+						Grid.SetColumn(btn, col);
 
-					// Loops Through Grid
-					for (int row = 0; row < gridHeight && !done; row += 2) {
-						for (int col = 0; col < gridWidth && !done; col += size.Width + 1) {
-							// Sets Grid To Current Position
-							Grid.SetRow(btn, row);
-							Grid.SetColumn(btn, col);
-
-							// Checks For Overlap
-							if (!isAppOverlapping(btn, grid)) {
-								// No Overlap, Placement Is Done								
-								done = true;
-							}
+						// Checks For Overlap
+						if (!isAppOverlapping(btn, grid, row, col)) {
+							// No Overlap, Placement Is Done								
+							done = true;
 						}
+					}
 
-						// If Out Of Space And There's Still More To Add
-						if (row + 2 >= gridHeight && !done) {
-							// Clears Grid, Displays Error, And Exits Procedure
-							grid.Children.Clear();
-							
-							ErrorMessage(errGrid, appFolder, [
-								"There are too many apps to fit on the grid.",
-								"Consider removing some apps or reducing their size",
-								"Click anywhere in the window to open related directory."
-							]);
-							
-							return;
-						}
+					if (done) {
+						break;
 					}
 				}
 			}
@@ -285,9 +271,22 @@ namespace WulffrithLauncher {
 			return btn;
 		}
 
-		// TODO: Make Method Check If App Icon Overlaps
-		private bool isAppOverlapping(Button btn, Grid grid) {
-			return true;
+		// Checks If App Icon Overlaps Others
+		private bool isAppOverlapping(Button btn, Grid grid, int row, int col) {
+			// Loop Through All Buttons On Grid
+			bool overlap = false;
+			foreach (Button child in grid.Children.OfType<Button>()) {
+				// If The A Different Button Is Intersecting Current Button
+				bool outsideHeight = row < Grid.GetRow(child) || row > Grid.GetRow(child) + Grid.GetRowSpan(child);
+				bool outsideWidth = col < Grid.GetColumn(child) || col > Grid.GetColumn(child) + Grid.GetColumnSpan(child);
+				if (child != btn && !outsideHeight && !outsideWidth) {
+					// There's An Overlap
+					overlap = true;
+					break;
+				}
+			}
+			// Return Result
+			return overlap;
 		}
 
 		// Used For App Icon Sizes
