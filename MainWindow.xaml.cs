@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.IO;
+﻿using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -21,9 +20,9 @@ namespace WulffrithLauncher {
 			const string IMG_FOLDER = $@"{APP_FOLDER}\images";
 
 			const int GRID_WIDTH_EFFECTIVE = 12;
-			const int GRID_WIDTH_ACTUAL = GRID_WIDTH_EFFECTIVE * 2 - 1;
+			const int GRID_WIDTH_ACTUAL = GRID_WIDTH_EFFECTIVE * 2;
 			const int GRID_HEIGHT_EFFECTIVE = 6;
-			const int GRID_HEIGHT_ACTUAL = GRID_HEIGHT_EFFECTIVE * 2 - 1;
+			const int GRID_HEIGHT_ACTUAL = GRID_HEIGHT_EFFECTIVE * 2;
 
 			// Dynamic Window Scaling and Positioning
 			double screenHeight = SystemParameters.PrimaryScreenHeight;
@@ -220,7 +219,7 @@ namespace WulffrithLauncher {
 							col += size.Width + 1;
 							done = true;
 						} else {
-							row += size.Height + 1;
+							row += 2;
 							col = 0;
 						}
 					} else {
@@ -240,11 +239,22 @@ namespace WulffrithLauncher {
 			btn.Click += (s, e) => {
 				MyLib.File.Start(fileData[3], fileData[4]);
 			};
+
 			btn.Background = SetImage($@"{imgFolder}\{fileData[1]}");
+
+
+			ToolTip toolTip = new();
+			toolTip.Content = fileData[0];
+			toolTip.Foreground = (SolidColorBrush)(new BrushConverter().ConvertFrom("#e3e3e3") ?? new());
+			toolTip.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#04060c") ?? new());
+			toolTip.FontWeight = FontWeights.Bold;
+			btn.ToolTip = toolTip;
+
 			Grid.SetColumn(btn, col);
 			Grid.SetColumnSpan(btn, size.Width);
 			Grid.SetRow(btn, row);
 			Grid.SetRowSpan(btn, size.Height);
+
 			grid.Children.Add(btn);
 		}
 	}
