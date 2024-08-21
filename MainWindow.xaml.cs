@@ -222,19 +222,24 @@ namespace WulffrithLauncher {
 				// Looks For Empty Spot
 				bool done = false;
 				while (!done) {
+
+					// Loops Through Grid
 					for (int row = 0; row < gridHeight && !done; row += 2) {
 						for (int col = 0; col < gridWidth && !done; col += size.Width + 1) {
-							// TODO: Check For Overlap
-							if (true) {
-								// Places Button in Empty Spot
-								Grid.SetRow(btn, row);
-								Grid.SetColumn(btn, col);
+							// Sets Grid To Current Position
+							Grid.SetRow(btn, row);
+							Grid.SetColumn(btn, col);
+
+							// Checks For Overlap
+							if (!isAppOverlapping(btn, grid)) {
+								// No Overlap, Placement Is Done								
 								done = true;
 							}
 						}
 
 						// If Out Of Space And There's Still More To Add
 						if (row + 2 >= gridHeight && !done) {
+							// Clears Grid, Displays Error, And Exits Procedure
 							grid.Children.Clear();
 							
 							ErrorMessage(errGrid, appFolder, [
@@ -278,6 +283,11 @@ namespace WulffrithLauncher {
 
 			// Returns Button
 			return btn;
+		}
+
+		// TODO: Make Method Check If App Icon Overlaps
+		private bool isAppOverlapping(Button btn, Grid grid) {
+			return true;
 		}
 
 		// Used For App Icon Sizes
