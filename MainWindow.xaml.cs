@@ -1,5 +1,7 @@
 ﻿using System.IO;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
 using MyLibrary;
 
 namespace WulffrithLauncher {
@@ -7,20 +9,18 @@ namespace WulffrithLauncher {
 	///		Interaction logic for MainWindow.xaml
 	/// </summary>
 	public partial class MainWindow : Window {
-
-		private const string APP_FOLDER = "apps";
-		private const string EXAMPLE_FILE = $@"{APP_FOLDER}\## - ExampleApplication.appdata";
-		private const string IMG_FOLDER = $@"{APP_FOLDER}\images";
-
-		private string[] _files;
-		private string[][] _fileDatas;
-		private string[] _imgFiles;
-
-		private int[,] _grid = new int[9,8];
-
 		public MainWindow() {
 			// Standard Component Initialization
 			InitializeComponent();
+
+			// CONSTS
+			const string APP_FOLDER = "apps";
+			const string EXAMPLE_FILE = $@"{APP_FOLDER}\## - ExampleApplication.appdata";
+			const string IMG_FOLDER = $@"{APP_FOLDER}\images";
+
+			const int LARGE_GRID_CELL_COUNT = 9;
+			const int MEDIUM_GRID_CELL_COUNT = 2;
+			const int SMALL_GRID_CELL_COUNT = 4;
 
 			// Dynamic Window Scaling and Positioning
 			double screenHeight = SystemParameters.PrimaryScreenHeight;
@@ -32,31 +32,57 @@ namespace WulffrithLauncher {
 
 			// Directory Creation
 			Directory.CreateDirectory(IMG_FOLDER);
-			_files = GetNonExampleFiles(APP_FOLDER, EXAMPLE_FILE);
+			string[] files = GetNonExampleFiles(APP_FOLDER, EXAMPLE_FILE);
 
 			// Check Directory For Files
-			if (_files.Length < 1) {
-				txtErrorMessage.Text = string.Join(Environment.NewLine, [
-					$"Please add an \".appdata\" file to the {APP_FOLDER} folder.",
+			if (files.Length < 1) {
+				// Creates Error Message And Opens File Explorer To Directory On Click
+				ErrorMessage(gridContainer, APP_FOLDER, [
+					"Please add an .appdata file.",
 					"An example file has been created for you.",
-					"Use the file as a reference for files you make and do not delete the example file."
+					"Use the file as a reference for files you make and do not delete the example file.",
+					"Click anywhere in the window to open the related directory."
 				]);
+
+				// Returns Early
+				return;
 			}
 
 			// Load File Datas
-			_fileDatas = LoadFileDatas(_files, _grid, out bool fileSizesValid);
+			string[][] filesData = LoadFileDatas(files, LARGE_GRID_CELL_COUNT, MEDIUM_GRID_CELL_COUNT, SMALL_GRID_CELL_COUNT, out bool fileSizesValid);
 
 			// Check For File Size Validation
 			if (!fileSizesValid) {
-				txtErrorMessage.Text = "One or more files have an invalid size.";
-				_imgFiles = [];
-			} else {
-				// Get Images From Image Directory
-				_imgFiles = Directory.GetFiles(IMG_FOLDER);
+				// Creates Error Message And Opens File Explorer To Directory On Click
+				ErrorMessage(gridContainer, APP_FOLDER, [
+					"One or more files have an invalid size.",
+					"Please search through the .appdata files and ensure all app sizes are written correctly.",
+					"Additionally, ensure your apps fit on the grid.",
+					"You may have to shrink the size of some of your apps or possibly remove some apps.",
+					"Click anywhere in the window to open the related directory."
+				]);
 
-				// Sets all Grid Positions To Unindexed Values
-				PrepGrid(_grid);
+				// Returns Early
+				return;
 			}
+
+			// Get Images From Image Directory
+			string[] imgFiles = Directory.GetFiles(IMG_FOLDER);
+
+			// Checks Images Have Been Loaded
+			if (imgFiles.Length == 0) {
+				// Error Message
+				ErrorMessage(gridContainer, IMG_FOLDER, [
+					"No images have been loaded.",
+					"Please add an image to load.",
+					"Click anywhere in the window to open the related directory."
+				]);
+
+				// Returns early
+				return;
+			}
+
+			// TODO: Redo Grid System
 		}
 
 		// Closes application when unfocused
@@ -89,60 +115,73 @@ namespace WulffrithLauncher {
 		}
 
 		// Loads File Datas
-		private static string[][] LoadFileDatas(string[] files, int[,] grid, out bool isValid) {
+		private static string[][] LoadFileDatas(string[] files, int largeCellCount, int mediumCellCount, int smallCellCount, out bool isValid) {
 			// Count Of File Data Sizes
 			int count = 0;
 
 			// Current Indexing System Based On File Names
-			string[][] fileDatas = new string[files.Length][];
+			string[][] filesData = new string[files.Length][];
 			for (int i = 0; i < files.Length; i++) {
 				// Reads File
 				string[] lines = File.ReadAllLines(files[i]);
 
 				// Creates Array To Hold File Datas
-				fileDatas[i] = new string[lines.Length];
+				filesData[i] = new string[lines.Length];
 
 				// Loads All File Datas From File
 				for (int j = 0; j < lines.Length; j++) {
-					fileDatas[i][j] = lines[j].Split('>')[1].Trim();
+					filesData[i][j] = lines[j].Split('>')[1].Trim();
 				}
 
 				// Converts Word Size To Respective Number
-				// Still in string[] so can't directly convert to int yet
-				switch (fileDatas[i][2]) {
+				switch (filesData[i][2]) {
 					case "Small":
-						fileDatas[i][2] = "1";
+						filesData[i][2] = "1";
 						break;
 					case "Medium":
-						fileDatas[i][2] = "4";
+						filesData[i][2] = "4";
 						break;
 					case "Large":
-						fileDatas[i][2] = "8";
+						filesData[i][2] = "8";
 						break;
 					default:
-						fileDatas[i][2] = $"{grid.GetLength(0) * grid.GetLength(1) + 1}";
+						filesData[i][2] = $"{largeCellCount * mediumCellCount * smallCellCount + 1}";
 						break;
 				}
-				count += int.Parse(fileDatas[i][2]);
+				count += int.Parse(filesData[i][2]);
 			}
 
-			if (count > grid.GetLength(0) * grid.GetLength(1)) {
+			// Checks if count does not surpass max allowed apps
+			if (count > largeCellCount * mediumCellCount * smallCellCount) {
 				isValid = false;
 			} else {
 				isValid = true;
 			}
 
 			// Returns FileDatas
-			return fileDatas;
+			return filesData;
 		}
 
-		// Fills Grid With An Unindexable Values
-		private static void PrepGrid(int[,] grid) {
-			for (int i = 0; i < grid.GetLength(0); i++) {
-				for (int j = 0; j < grid.GetLength(1); j++) {
-					grid[i, j] = -1;
-				}
-			}
+		// Creates An Error Message Button In Grid Container
+		private void ErrorMessage(Grid container, string directory, string[] lines) {
+			// Creates Error Message Button
+			Button btn = new();
+
+			// Button Properties
+			Grid.SetRow(btn, 0);
+			Grid.SetRowSpan(btn, 3);
+			Grid.SetColumn(btn, 0);
+			Grid.SetColumnSpan(btn, 3);
+			btn.Padding = new Thickness(4);
+			btn.Content = string.Join(Environment.NewLine, lines);
+			btn.VerticalContentAlignment = VerticalAlignment.Top;
+			btn.HorizontalContentAlignment = HorizontalAlignment.Left;
+			btn.Click += (s, e) => {
+				MyLib.File.Start("explorer.exe", Path.GetFullPath(directory));
+			};
+
+			// Appends To Container
+			container.Children.Add(btn);
 		}
 	}
 }

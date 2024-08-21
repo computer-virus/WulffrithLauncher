@@ -15,6 +15,74 @@
 		Topmost="True"
 		Deactivated="OnUnfocus">
 
+	<!-- Custom Styles -->
+	<Window.Resources>
+		<!-- Button Style-->
+		<Style x:Key="FocusVisual">
+			<Setter Property="Control.Template">
+				<Setter.Value>
+					<ControlTemplate>
+						<Rectangle Margin="2" StrokeDashArray="1 2" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" SnapsToDevicePixels="true" StrokeThickness="1"/>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+		<SolidColorBrush x:Key="Button.Static.Background" Color="#0000"/>
+		<SolidColorBrush x:Key="Button.Static.Border" Color="#0000"/>
+		<SolidColorBrush x:Key="Button.Static.Foreground" Color="#f00"/>
+		<SolidColorBrush x:Key="Button.MouseOver.Background" Color="#0000"/>
+		<SolidColorBrush x:Key="Button.MouseOver.Border" Color="#f00"/>
+		<SolidColorBrush x:Key="Button.MouseOver.Foreground" Color="#f00"/>
+		<SolidColorBrush x:Key="Button.Pressed.Background" Color="#0000"/>
+		<SolidColorBrush x:Key="Button.Pressed.Border" Color="#0ff"/>
+		<SolidColorBrush x:Key="Button.Pressed.Foreground" Color="#f00"/>
+		<SolidColorBrush x:Key="Button.Disabled.Background" Color="#0000"/>
+		<SolidColorBrush x:Key="Button.Disabled.Border" Color="#0000"/>
+		<SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#800"/>
+		<Style TargetType="{x:Type Button}">
+			<Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+			<Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
+			<Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
+			<Setter Property="Foreground" Value="{StaticResource Button.Static.Foreground}"/>
+			<Setter Property="FontFamily" Value="Cascadia Code"/>
+			<Setter Property="FontSize" Value="16"/>
+			<Setter Property="BorderThickness" Value="2"/>
+			<Setter Property="HorizontalContentAlignment" Value="Center"/>
+			<Setter Property="VerticalContentAlignment" Value="Center"/>
+			<Setter Property="Padding" Value="1"/>
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="{x:Type ButtonBase}">
+						<Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="true">
+							<ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+						</Border>
+						<ControlTemplate.Triggers>
+							<Trigger Property="Button.IsDefaulted" Value="true">
+								<Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+							</Trigger>
+							<Trigger Property="IsMouseOver" Value="true">
+								<Setter Property="Background" TargetName="border" Value="{StaticResource Button.MouseOver.Background}"/>
+								<Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.MouseOver.Border}"/>
+								<Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.MouseOver.Foreground}"/>
+							</Trigger>
+							<Trigger Property="IsPressed" Value="true">
+								<Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.Background}"/>
+								<Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.Border}"/>
+								<Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.Pressed.Foreground}"/>
+							</Trigger>
+							<Trigger Property="IsEnabled" Value="false">
+								<Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
+								<Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Disabled.Border}"/>
+								<Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.Disabled.Foreground}"/>
+							</Trigger>
+						</ControlTemplate.Triggers>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+
+	</Window.Resources>
+
 	<WindowChrome.WindowChrome>
 		<WindowChrome x:Name="wndChrmWindowCornerRadius" GlassFrameThickness="0" CornerRadius="20" CaptionHeight="0"/> <!-- Window Border Radius And Title Bar Removal -->
 	</WindowChrome.WindowChrome>
@@ -43,24 +111,31 @@
 		<Grid x:Name="gridLarge" Grid.Column="1" Grid.Row="1">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="310*"/>
-				<ColumnDefinition Width="10*"/> <!-- Margin Col, Unused -->
+				<ColumnDefinition Width="10*"/>
+				<!-- Margin Col, Unused -->
 				<ColumnDefinition Width="310*"/>
-				<ColumnDefinition Width="10*"/> <!-- Margin Col, Unused -->
+				<ColumnDefinition Width="10*"/>
+				<!-- Margin Col, Unused -->
 				<ColumnDefinition Width="310*"/>
 			</Grid.ColumnDefinitions>
 			<Grid.RowDefinitions>
 				<RowDefinition Height="150*"/>
-				<RowDefinition Height="10*"/> <!-- Margin Row, Unused -->
+				<RowDefinition Height="10*"/>
+				<!-- Margin Row, Unused -->
 				<RowDefinition Height="150*"/>
-				<RowDefinition Height="10*"/> <!-- Margin Row, Unused -->
+				<RowDefinition Height="10*"/>
+				<!-- Margin Row, Unused -->
 				<RowDefinition Height="150*"/>
 			</Grid.RowDefinitions>
+
+			<!-- These Are Here As A Visual Aid. Will Be Deleted Once No Longer Needed. -->
 
 			<!-- Medium Grid 0 -->
 			<Grid Grid.Row="0" Grid.Column="0" x:Name="gridMedium0">
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="150*"/>
-					<ColumnDefinition Width="10*"/> <!-- Margin Column, Unused -->
+					<ColumnDefinition Width="10*"/>
+					<!-- Margin Column, Unused -->
 					<ColumnDefinition Width="150*"/>
 				</Grid.ColumnDefinitions>
 
@@ -68,12 +143,14 @@
 				<Grid Grid.Column="0" x:Name="gridSmall00">
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="70*"/>
-						<ColumnDefinition Width="10*"/> <!-- Margin Column, Unused -->
+						<ColumnDefinition Width="10*"/>
+						<!-- Margin Column, Unused -->
 						<ColumnDefinition Width="70*"/>
 					</Grid.ColumnDefinitions>
 					<Grid.RowDefinitions>
 						<RowDefinition Height="70*"/>
-						<RowDefinition Height="10*"/> <!-- Margin Row, Unused -->
+						<RowDefinition Height="10*"/>
+						<!-- Margin Row, Unused -->
 						<RowDefinition Height="70*"/>
 					</Grid.RowDefinitions>
 				</Grid>
@@ -82,12 +159,14 @@
 				<Grid Grid.Column="2" x:Name="gridSmall01">
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="70*"/>
-						<ColumnDefinition Width="10*"/> <!-- Margin Column, Unused -->
+						<ColumnDefinition Width="10*"/>
+						<!-- Margin Column, Unused -->
 						<ColumnDefinition Width="70*"/>
 					</Grid.ColumnDefinitions>
 					<Grid.RowDefinitions>
 						<RowDefinition Height="70*"/>
-						<RowDefinition Height="10*"/> <!-- Margin Row, Unused -->
+						<RowDefinition Height="10*"/>
+						<!-- Margin Row, Unused -->
 						<RowDefinition Height="70*"/>
 					</Grid.RowDefinitions>
 				</Grid>
@@ -98,7 +177,8 @@
 			<Grid Grid.Row="0" Grid.Column="2" x:Name="gridMedium1">
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="150*"/>
-					<ColumnDefinition Width="10*"/>	<!-- Margin Column, Unused -->
+					<ColumnDefinition Width="10*"/>
+					<!-- Margin Column, Unused -->
 					<ColumnDefinition Width="150*"/>
 				</Grid.ColumnDefinitions>
 
@@ -106,12 +186,14 @@
 				<Grid Grid.Column="0" x:Name="gridSmall10">
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="70*"/>
-						<ColumnDefinition Width="10*"/> <!-- Margin Column, Unused -->
+						<ColumnDefinition Width="10*"/>
+						<!-- Margin Column, Unused -->
 						<ColumnDefinition Width="70*"/>
 					</Grid.ColumnDefinitions>
 					<Grid.RowDefinitions>
 						<RowDefinition Height="70*"/>
-						<RowDefinition Height="10*"/> <!-- Margin Row, Unused -->
+						<RowDefinition Height="10*"/>
+						<!-- Margin Row, Unused -->
 						<RowDefinition Height="70*"/>
 					</Grid.RowDefinitions>
 				</Grid>
@@ -120,12 +202,14 @@
 				<Grid Grid.Column="2" x:Name="gridSmall11">
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="70*"/>
-						<ColumnDefinition Width="10*"/> <!-- Margin Column, Unused -->
+						<ColumnDefinition Width="10*"/>
+						<!-- Margin Column, Unused -->
 						<ColumnDefinition Width="70*"/>
 					</Grid.ColumnDefinitions>
 					<Grid.RowDefinitions>
 						<RowDefinition Height="70*"/>
-						<RowDefinition Height="10*"/> <!-- Margin Row, Unused -->
+						<RowDefinition Height="10*"/>
+						<!-- Margin Row, Unused -->
 						<RowDefinition Height="70*"/>
 					</Grid.RowDefinitions>
 				</Grid>
@@ -136,7 +220,8 @@
 			<Grid Grid.Row="0" Grid.Column="4" x:Name="gridMedium2">
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="150*"/>
-					<ColumnDefinition Width="10*"/>	<!-- Margin Column, Unused -->
+					<ColumnDefinition Width="10*"/>
+					<!-- Margin Column, Unused -->
 					<ColumnDefinition Width="150*"/>
 				</Grid.ColumnDefinitions>
 
@@ -144,12 +229,14 @@
 				<Grid Grid.Column="0" x:Name="gridSmall20">
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="70*"/>
-						<ColumnDefinition Width="10*"/>	<!-- Margin Column, Unused -->
+						<ColumnDefinition Width="10*"/>
+						<!-- Margin Column, Unused -->
 						<ColumnDefinition Width="70*"/>
 					</Grid.ColumnDefinitions>
 					<Grid.RowDefinitions>
 						<RowDefinition Height="70*"/>
-						<RowDefinition Height="10*"/> <!-- Margin Row, Unused -->
+						<RowDefinition Height="10*"/>
+						<!-- Margin Row, Unused -->
 						<RowDefinition Height="70*"/>
 					</Grid.RowDefinitions>
 				</Grid>
@@ -158,12 +245,14 @@
 				<Grid Grid.Column="2" x:Name="gridSmall21">
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="70*"/>
-						<ColumnDefinition Width="10*"/>	<!-- Margin Column, Unused -->
+						<ColumnDefinition Width="10*"/>
+						<!-- Margin Column, Unused -->
 						<ColumnDefinition Width="70*"/>
 					</Grid.ColumnDefinitions>
 					<Grid.RowDefinitions>
 						<RowDefinition Height="70*"/>
-						<RowDefinition Height="10*"/> <!-- Margin Row, Unused -->
+						<RowDefinition Height="10*"/>
+						<!-- Margin Row, Unused -->
 						<RowDefinition Height="70*"/>
 					</Grid.RowDefinitions>
 				</Grid>
@@ -174,7 +263,8 @@
 			<Grid Grid.Row="2" Grid.Column="0" x:Name="gridMedium3">
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="150*"/>
-					<ColumnDefinition Width="10*"/>	<!-- Margin Column, Unused -->
+					<ColumnDefinition Width="10*"/>
+					<!-- Margin Column, Unused -->
 					<ColumnDefinition Width="150*"/>
 				</Grid.ColumnDefinitions>
 
@@ -182,12 +272,14 @@
 				<Grid Grid.Column="0" x:Name="gridSmall30">
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="70*"/>
-						<ColumnDefinition Width="10*"/>	<!-- Margin Column, Unused -->
+						<ColumnDefinition Width="10*"/>
+						<!-- Margin Column, Unused -->
 						<ColumnDefinition Width="70*"/>
 					</Grid.ColumnDefinitions>
 					<Grid.RowDefinitions>
 						<RowDefinition Height="70*"/>
-						<RowDefinition Height="10*"/> <!-- Margin Row, Unused -->
+						<RowDefinition Height="10*"/>
+						<!-- Margin Row, Unused -->
 						<RowDefinition Height="70*"/>
 					</Grid.RowDefinitions>
 				</Grid>
@@ -196,12 +288,14 @@
 				<Grid Grid.Column="2" x:Name="gridSmall31">
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="70*"/>
-						<ColumnDefinition Width="10*"/>	<!-- Margin Column, Unused -->
+						<ColumnDefinition Width="10*"/>
+						<!-- Margin Column, Unused -->
 						<ColumnDefinition Width="70*"/>
 					</Grid.ColumnDefinitions>
 					<Grid.RowDefinitions>
 						<RowDefinition Height="70*"/>
-						<RowDefinition Height="10*"/> <!-- Margin Row, Unused -->
+						<RowDefinition Height="10*"/>
+						<!-- Margin Row, Unused -->
 						<RowDefinition Height="70*"/>
 					</Grid.RowDefinitions>
 				</Grid>
@@ -212,7 +306,8 @@
 			<Grid Grid.Row="2" Grid.Column="2" x:Name="gridMedium4">
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="150*"/>
-					<ColumnDefinition Width="10*"/> <!-- Margin Column, Unused -->
+					<ColumnDefinition Width="10*"/>
+					<!-- Margin Column, Unused -->
 					<ColumnDefinition Width="150*"/>
 				</Grid.ColumnDefinitions>
 
@@ -220,12 +315,14 @@
 				<Grid Grid.Column="0" x:Name="gridSmall40">
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="70*"/>
-						<ColumnDefinition Width="10*"/> <!-- Margin Column, Unused -->
+						<ColumnDefinition Width="10*"/>
+						<!-- Margin Column, Unused -->
 						<ColumnDefinition Width="70*"/>
 					</Grid.ColumnDefinitions>
 					<Grid.RowDefinitions>
 						<RowDefinition Height="70*"/>
-						<RowDefinition Height="10*"/> <!-- Margin Row, Unused -->
+						<RowDefinition Height="10*"/>
+						<!-- Margin Row, Unused -->
 						<RowDefinition Height="70*"/>
 					</Grid.RowDefinitions>
 				</Grid>
@@ -234,12 +331,14 @@
 				<Grid Grid.Column="2" x:Name="gridSmall41">
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="70*"/>
-						<ColumnDefinition Width="10*"/> <!-- Margin Column, Unused -->
+						<ColumnDefinition Width="10*"/>
+						<!-- Margin Column, Unused -->
 						<ColumnDefinition Width="70*"/>
 					</Grid.ColumnDefinitions>
 					<Grid.RowDefinitions>
 						<RowDefinition Height="70*"/>
-						<RowDefinition Height="10*"/> <!-- Margin Row, Unused -->
+						<RowDefinition Height="10*"/>
+						<!-- Margin Row, Unused -->
 						<RowDefinition Height="70*"/>
 					</Grid.RowDefinitions>
 				</Grid>
@@ -250,7 +349,8 @@
 			<Grid Grid.Row="2" Grid.Column="4" x:Name="gridMedium5">
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="150*"/>
-					<ColumnDefinition Width="10*"/> <!-- Margin Column, Unused -->
+					<ColumnDefinition Width="10*"/>
+					<!-- Margin Column, Unused -->
 					<ColumnDefinition Width="150*"/>
 				</Grid.ColumnDefinitions>
 
@@ -258,12 +358,14 @@
 				<Grid Grid.Column="0" x:Name="gridSmall50">
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="70*"/>
-						<ColumnDefinition Width="10*"/> <!-- Margin Column, Unused -->
+						<ColumnDefinition Width="10*"/>
+						<!-- Margin Column, Unused -->
 						<ColumnDefinition Width="70*"/>
 					</Grid.ColumnDefinitions>
 					<Grid.RowDefinitions>
 						<RowDefinition Height="70*"/>
-						<RowDefinition Height="10*"/> <!-- Margin Row, Unused -->
+						<RowDefinition Height="10*"/>
+						<!-- Margin Row, Unused -->
 						<RowDefinition Height="70*"/>
 					</Grid.RowDefinitions>
 				</Grid>
@@ -272,12 +374,14 @@
 				<Grid Grid.Column="2" x:Name="gridSmall51">
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="70*"/>
-						<ColumnDefinition Width="10*"/> <!-- Margin Column, Unused -->
+						<ColumnDefinition Width="10*"/>
+						<!-- Margin Column, Unused -->
 						<ColumnDefinition Width="70*"/>
 					</Grid.ColumnDefinitions>
 					<Grid.RowDefinitions>
 						<RowDefinition Height="70*"/>
-						<RowDefinition Height="10*"/> <!-- Margin Row, Unused -->
+						<RowDefinition Height="10*"/>
+						<!-- Margin Row, Unused -->
 						<RowDefinition Height="70*"/>
 					</Grid.RowDefinitions>
 				</Grid>
@@ -288,7 +392,8 @@
 			<Grid Grid.Row="4" Grid.Column="0" x:Name="gridMedium6">
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="150*"/>
-					<ColumnDefinition Width="10*"/> <!-- Margin Column, Unused -->
+					<ColumnDefinition Width="10*"/>
+					<!-- Margin Column, Unused -->
 					<ColumnDefinition Width="150*"/>
 				</Grid.ColumnDefinitions>
 
@@ -296,12 +401,14 @@
 				<Grid Grid.Column="0" x:Name="gridSmall60">
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="70*"/>
-						<ColumnDefinition Width="10*"/> <!-- Margin Column, Unused -->
+						<ColumnDefinition Width="10*"/>
+						<!-- Margin Column, Unused -->
 						<ColumnDefinition Width="70*"/>
 					</Grid.ColumnDefinitions>
 					<Grid.RowDefinitions>
 						<RowDefinition Height="70*"/>
-						<RowDefinition Height="10*"/> <!-- Margin Row, Unused -->
+						<RowDefinition Height="10*"/>
+						<!-- Margin Row, Unused -->
 						<RowDefinition Height="70*"/>
 					</Grid.RowDefinitions>
 				</Grid>
@@ -310,12 +417,14 @@
 				<Grid Grid.Column="2" x:Name="gridSmall61">
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="70*"/>
-						<ColumnDefinition Width="10*"/> <!-- Margin Column, Unused -->
+						<ColumnDefinition Width="10*"/>
+						<!-- Margin Column, Unused -->
 						<ColumnDefinition Width="70*"/>
 					</Grid.ColumnDefinitions>
 					<Grid.RowDefinitions>
 						<RowDefinition Height="70*"/>
-						<RowDefinition Height="10*"/> <!-- Margin Row, Unused -->
+						<RowDefinition Height="10*"/>
+						<!-- Margin Row, Unused -->
 						<RowDefinition Height="70*"/>
 					</Grid.RowDefinitions>
 				</Grid>
@@ -326,7 +435,8 @@
 			<Grid Grid.Row="4" Grid.Column="2" x:Name="gridMedium7">
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="150*"/>
-					<ColumnDefinition Width="10*"/> <!-- Margin Column, Unused -->
+					<ColumnDefinition Width="10*"/>
+					<!-- Margin Column, Unused -->
 					<ColumnDefinition Width="150*"/>
 				</Grid.ColumnDefinitions>
 
@@ -334,12 +444,14 @@
 				<Grid Grid.Column="0" x:Name="gridSmall70">
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="70*"/>
-						<ColumnDefinition Width="10*"/> <!-- Margin Column, Unused -->
+						<ColumnDefinition Width="10*"/>
+						<!-- Margin Column, Unused -->
 						<ColumnDefinition Width="70*"/>
 					</Grid.ColumnDefinitions>
 					<Grid.RowDefinitions>
 						<RowDefinition Height="70*"/>
-						<RowDefinition Height="10*"/> <!-- Margin Row, Unused -->
+						<RowDefinition Height="10*"/>
+						<!-- Margin Row, Unused -->
 						<RowDefinition Height="70*"/>
 					</Grid.RowDefinitions>
 				</Grid>
@@ -348,12 +460,14 @@
 				<Grid Grid.Column="2" x:Name="gridSmall71">
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="70*"/>
-						<ColumnDefinition Width="10*"/> <!-- Margin Column, Unused -->
+						<ColumnDefinition Width="10*"/>
+						<!-- Margin Column, Unused -->
 						<ColumnDefinition Width="70*"/>
 					</Grid.ColumnDefinitions>
 					<Grid.RowDefinitions>
 						<RowDefinition Height="70*"/>
-						<RowDefinition Height="10*"/> <!-- Margin Row, Unused -->
+						<RowDefinition Height="10*"/>
+						<!-- Margin Row, Unused -->
 						<RowDefinition Height="70*"/>
 					</Grid.RowDefinitions>
 				</Grid>
@@ -364,7 +478,8 @@
 			<Grid Grid.Row="4" Grid.Column="4" x:Name="gridMedium8">
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="150*"/>
-					<ColumnDefinition Width="10*"/> <!-- Margin Column, Unused -->
+					<ColumnDefinition Width="10*"/>
+					<!-- Margin Column, Unused -->
 					<ColumnDefinition Width="150*"/>
 				</Grid.ColumnDefinitions>
 
@@ -372,12 +487,14 @@
 				<Grid Grid.Column="0" x:Name="gridSmall80">
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="70*"/>
-						<ColumnDefinition Width="10*"/> <!-- Margin Column, Unused -->
+						<ColumnDefinition Width="10*"/>
+						<!-- Margin Column, Unused -->
 						<ColumnDefinition Width="70*"/>
 					</Grid.ColumnDefinitions>
 					<Grid.RowDefinitions>
 						<RowDefinition Height="70*"/>
-						<RowDefinition Height="10*"/> <!-- Margin Row, Unused -->
+						<RowDefinition Height="10*"/>
+						<!-- Margin Row, Unused -->
 						<RowDefinition Height="70*"/>
 					</Grid.RowDefinitions>
 				</Grid>
@@ -386,12 +503,14 @@
 				<Grid Grid.Column="2" x:Name="gridSmall81">
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="70*"/>
-						<ColumnDefinition Width="10*"/> <!-- Margin Column, Unused -->
+						<ColumnDefinition Width="10*"/>
+						<!-- Margin Column, Unused -->
 						<ColumnDefinition Width="70*"/>
 					</Grid.ColumnDefinitions>
 					<Grid.RowDefinitions>
 						<RowDefinition Height="70*"/>
-						<RowDefinition Height="10*"/> <!-- Margin Row, Unused -->
+						<RowDefinition Height="10*"/>
+						<!-- Margin Row, Unused -->
 						<RowDefinition Height="70*"/>
 					</Grid.RowDefinitions>
 				</Grid>
@@ -399,9 +518,6 @@
 			</Grid>
 
 		</Grid>
-
-		<!-- Error Message -->
-		<TextBlock Grid.Column="1" Grid.Row="1" x:Name="txtErrorMessage" Text="" FontSize="24" FontFamily="Cascadia Code" Foreground="#f00"/>
 
 	</Grid>
 
