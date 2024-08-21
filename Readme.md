@@ -9,17 +9,22 @@ The goal is to make the launcher work relatively closely to the Windows 10 tiled
 - Always Topmost Window
 - Directory For App Data Storage
 - Loading Data From Files Into Temporary Memory
-- Warns User When Directory Is Empty
 - Launcher Window Is Fixed To Requested Location
 - Automatically Closes When Unfocused
 - Launcher window scaling to be adaptive to screen size
-- Grid System That's Accurate To Given Margins
 - Loading Image Data From Directory Into Temporary Storage
+- Validation For File Count
+- Validation For Panel Size
+- Validation For Image Loading
 
 ### Planned Implementations (Bare Minimum):
-- Error Checking For Invalid File Format And Warn User
-- Use App Data And Image Data To Create Icons On The Grid System
+- New Grid System (Again)
+- Test Different Children Properties
+- Check for Space in grids
+- Use App Data And Image Data To Create Icons On The Grid System w/ Tooltip
 - Launch Application When Corresponding Icon Is Clicked
+- Validation For App Location
+- Validation For App Image
 
 ### Possible Future Implementations (If I Can Manage It):
 - Add manual launcher window scaling through in-app menu
