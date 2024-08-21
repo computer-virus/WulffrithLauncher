@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Diagnostics;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -42,7 +43,7 @@ namespace WulffrithLauncher {
 				ErrorMessage(gridContainer, APP_FOLDER, [
 					"Please add an .appdata file.",
 					"An example file has been created for you.",
-					"Use the file as a reference for files you make and do not delete the example file.",
+					"Use the file as a reference for apps you integrate and do not delete the example file.",
 					"Click anywhere in the window to open the related directory."
 				]);
 
@@ -53,17 +54,39 @@ namespace WulffrithLauncher {
 			// Load File Datas
 			string[][] filesData = LoadFileDatas(files, GRID_WIDTH_EFFECTIVE, GRID_HEIGHT_EFFECTIVE, out bool fileSizesValid);
 
-			// TODO: Check if Files Exist
-			// Current Problem: Windows Apps Like MS Paint Trick Program Into Thinking They're Relative Paths
+			// Checks If File Path Is An Absolute Path And Then If It Exists
+			foreach (string[] fileData in filesData) {
+				if (!Path.IsPathFullyQualified(fileData[3])) {
+					// Creates Error Message And Opens File Explorer To Directory On Click
+					ErrorMessage(gridContainer, APP_FOLDER, [
+						$"An absolute path for {fileData[0]} was not provided.",
+						"Please ensure you only provide absolute paths in .appdata files.",
+						"If you added a Windows app such as MS Paint or File Explorer, provide an absolute path to a shortcut instead. (Thanks Windows...)",
+						"Click anywhere in the window to open the related directory."
+					]);
+
+					// Returns Early
+					return;
+				} else if (!File.Exists(fileData[3])) {
+					// Creates Error Message And Opens File Explorer To Directory On Click
+					ErrorMessage(gridContainer, APP_FOLDER, [
+						$"The absolute path for {fileData[0]} was not found.",
+						"Please ensure the path was written correctly and that the path doesn't require elevated permissions to access.",
+						"Click anywhere in the window to open the related directory."
+					]);
+
+					// Returns Early
+					return;
+				}
+			}
 
 			// Check For File Size Validation
 			if (!fileSizesValid) {
 				// Creates Error Message And Opens File Explorer To Directory On Click
 				ErrorMessage(gridContainer, APP_FOLDER, [
-					"One or more files have an invalid size.",
+					"One or more apps have an invalid size OR one or more apps don't fit on the grid.",
 					"Please search through the .appdata files and ensure all app sizes are written correctly.",
-					"Additionally, ensure your apps fit on the grid.",
-					"You may have to shrink the size of some of your apps or possibly remove some apps.",
+					"Additionally, you may have to shrink the size of some of your apps or possibly remove some apps.",
 					"Click anywhere in the window to open the related directory."
 				]);
 
@@ -179,12 +202,15 @@ namespace WulffrithLauncher {
 			Grid.SetColumn(btn, 0);
 			Grid.SetColumnSpan(btn, 3);
 			btn.Padding = new Thickness(4);
-			btn.Content = string.Join(Environment.NewLine, lines);
 			btn.VerticalContentAlignment = VerticalAlignment.Top;
 			btn.HorizontalContentAlignment = HorizontalAlignment.Left;
 			btn.Click += (s, e) => {
 				MyLib.File.Start("explorer.exe", Path.GetFullPath(directory));
 			};
+			TextBlock txt = new TextBlock();
+			txt.Text = string.Join(Environment.NewLine, lines);
+			txt.TextWrapping = TextWrapping.Wrap;
+			btn.Content = txt;
 
 			// Appends To Container
 			container.Children.Add(btn);

@@ -22,11 +22,10 @@ The goal is to make the launcher work relatively closely to the Windows 10 tiled
 - Added Grid Height Validation
 - Added Check for Space in grids
 - Added Image Validation
-
-### Planned Implementations (Bare Minimum):
 - Validation For App Location
 
-### Possible Future Implementations (If I Can Manage It):
+
+### Possible Future Implementations (If I Get To Them):
 - Add manual launcher window scaling through in-app menu
 - Improved Indexing System And Allow Users To Drag Icons To Change App Indexes
 - Implement Acrylic Brush Into WPF For Launcher Background
