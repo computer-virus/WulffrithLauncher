@@ -95,9 +95,6 @@
 		</Grid.RowDefinitions>
 
 		<!-- Icon Grid System -->
-		<!-- Starts With Large Grid -->
-		<!-- Each Valid Section Of Large Grid Gets Split Into Medium Grids -->
-		<!-- Each Valid Section Of Medium Grids Get Split Into Small Grids -->
 		<!-- Margins Should Not Surpass 10* -->
 		<Grid x:Name="gridIcons" Grid.Column="1" Grid.Row="1">
 			<Grid.ColumnDefinitions>

@@ -85,24 +85,8 @@ namespace WulffrithLauncher {
 				return;
 			}
 
-			// Testing Filling Grid With Dummy Apps
-			IconSize size = new IconSize().Small();
-			for (int i = 0; i < GRID_WIDTH_ACTUAL; i += size.Width + 1) {
-				for (int j = 0; j < GRID_HEIGHT_ACTUAL; j += size.Height + 1) {
-					Button btn = new();
-					btn.Click += (s, e) => {
-						MyLib.File.Start("explorer.exe", Path.GetFullPath(APP_FOLDER));
-					};
-					btn.Background = SetImage(imgFiles[0]);
-					Grid.SetColumn(btn, i);
-					Grid.SetColumnSpan(btn, size.Width);
-					Grid.SetRow(btn, j);
-					Grid.SetRowSpan(btn, size.Height);
-					gridIcons.Children.Add(btn);
-				}
-			}
-
-			// TODO: New Grid System Using Grid Names
+			// TODO: Add Icons
+			FillGrid(gridIcons, filesData, imgFiles, GRID_WIDTH_ACTUAL, GRID_HEIGHT_ACTUAL, gridContainer, APP_FOLDER, IMG_FOLDER);
 		}
 
 		// Closes application when unfocused
@@ -207,6 +191,61 @@ namespace WulffrithLauncher {
 		// Returns New ImageBrush With Image For Background Images
 		private ImageBrush SetImage(string path) {
 			return new ImageBrush(new BitmapImage(new Uri(path, UriKind.RelativeOrAbsolute)));
+		}
+
+		// Fills Grid
+		public void FillGrid(Grid grid, string[][] filesData, string[] imgFiles, int gridWidth, int gridHeight, Grid errGrid, string appFolder, string imgFolder) {
+			int row = 0;
+			int col = 0;
+			foreach (string[] fileData in filesData) {
+				IconSize size;
+				switch (fileData[2]) {
+					default:
+					case "Small":
+						size = new IconSize().Small();
+						break;
+					case "Medium":
+						size = new IconSize().Medium();
+						break;
+					case "Large":
+						size = new IconSize().Large();
+						break;
+				}
+
+				bool done = false;
+				while (!done) {
+					if (row + size.Height < gridHeight) {
+						if (col + size.Width < gridWidth) {
+							AddAppIcon(fileData, size, grid, row, col, imgFolder);
+							col += size.Width + 1;
+							done = true;
+						} else {
+							row += size.Height + 1;
+							col = 0;
+						}
+					} else {
+						ErrorMessage(errGrid, appFolder, [
+							$"App \"{fileData[0]}\" does not fit within the grid height.",
+							"Please adjust app index to fit the app into the grid.",
+							"Click anywhere in the window to open related directory"
+						]);
+					}
+				}
+			}
+		}
+
+		// Adds Icon
+		public void AddAppIcon(string[] fileData, IconSize size, Grid grid, int row, int col, string imgFolder) {
+			Button btn = new();
+			btn.Click += (s, e) => {
+				MyLib.File.Start(fileData[3], fileData[4]);
+			};
+			btn.Background = SetImage($@"{imgFolder}\{fileData[1]}");
+			Grid.SetColumn(btn, col);
+			Grid.SetColumnSpan(btn, size.Width);
+			Grid.SetRow(btn, row);
+			Grid.SetRowSpan(btn, size.Height);
+			grid.Children.Add(btn);
 		}
 	}
 
