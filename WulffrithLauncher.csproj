@@ -6,7 +6,12 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>WulffrithLauncherLogo.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="WulffrithLauncherLogo.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <Reference Include="MyLibrary">
