@@ -154,21 +154,21 @@ namespace WulffrithLauncher {
 				}
 
 				// Converts Word Size To Respective Number
+				IconSize size = new IconSize();
 				switch (filesData[i][2]) {
 					case "Small":
-						filesData[i][2] = "1";
+						count += (size.Small().Width / 2 + 1) * (size.Small().Height / 2 + 1);
 						break;
 					case "Medium":
-						filesData[i][2] = "4";
+						count += (size.Medium().Width / 2 + 1) * (size.Medium().Height / 2 + 1);
 						break;
 					case "Large":
-						filesData[i][2] = "8";
+						count += (size.Large().Width / 2 + 1) * (size.Large().Height / 2 + 1);
 						break;
 					default:
-						filesData[i][2] = $"{width * height + 1}";
+						count += width * height + 1;
 						break;
 				}
-				count += int.Parse(filesData[i][2]);
 			}
 
 			// Checks if count does not surpass max allowed apps
