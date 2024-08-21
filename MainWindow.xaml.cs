@@ -20,9 +20,8 @@ namespace WulffrithLauncher {
 			const string EXAMPLE_FILE = $@"{APP_FOLDER}\## - ExampleApplication.appdata";
 			const string IMG_FOLDER = $@"{APP_FOLDER}\images";
 
-			const int LARGE_GRID_CELL_COUNT = 9;
-			const int MEDIUM_GRID_CELL_COUNT = 2;
-			const int SMALL_GRID_CELL_COUNT = 4;
+			const int GRID_WIDTH = 12;
+			const int GRID_HEIGHT = 6;
 
 			// Dynamic Window Scaling and Positioning
 			double screenHeight = SystemParameters.PrimaryScreenHeight;
@@ -51,7 +50,7 @@ namespace WulffrithLauncher {
 			}
 
 			// Load File Datas
-			string[][] filesData = LoadFileDatas(files, LARGE_GRID_CELL_COUNT, MEDIUM_GRID_CELL_COUNT, SMALL_GRID_CELL_COUNT, out bool fileSizesValid);
+			string[][] filesData = LoadFileDatas(files, GRID_WIDTH, GRID_HEIGHT, out bool fileSizesValid);
 
 			// Check For File Size Validation
 			if (!fileSizesValid) {
@@ -83,56 +82,6 @@ namespace WulffrithLauncher {
 				// Returns early
 				return;
 			}
-
-			// Reminder How To Access Grid Children
-			Debug.WriteLine($"\nGrids:\n\t{gridLarge.Name}");
-			/*for (int i = 0; i < 5; i += 2) {
-				for (int j = 0; j < 5; j += 2) {
-					Button btn = new();
-					btn.Background = SetImage(imgFiles[0]);
-					Grid.SetRow(btn, i);
-					Grid.SetColumn(btn, j);
-					btn.Click += (s, e) => {
-						MyLib.File.Start("explorer.exe", Path.GetFullPath(APP_FOLDER));
-					};
-					gridLarge.Children.Add(btn);
-				}
-			}*/
-
-			foreach (object mediumGrid in gridLarge.Children) {
-				if (mediumGrid is Grid) {
-					Debug.WriteLine($"\t\t{((Grid)mediumGrid).Name}");
-					/*for (int i = 0; i < 3; i += 2) {
-						Button btn = new();
-						btn.Background = SetImage(imgFiles[1]);
-						Grid.SetColumn(btn, i);
-						btn.Click += (s, e) => {
-							MyLib.File.Start("explorer.exe", Path.GetFullPath(APP_FOLDER));
-						};
-						((Grid)mediumGrid).Children.Add(btn);
-					}*/
-
-					foreach (object smallGrid in ((Grid)mediumGrid).Children) {
-						if (smallGrid is Grid) {
-							Debug.WriteLine($"\t\t\t{((Grid)smallGrid).Name}");
-							/*for (int i = 0; i < 3; i += 2) {
-								for (int j = 0; j < 3; j += 2) {
-									Button btn = new();
-									btn.Background = SetImage(imgFiles[2]);
-									Grid.SetRow(btn, i);
-									Grid.SetColumn(btn, j);
-									btn.Click += (s, e) => {
-										MyLib.File.Start("explorer.exe", Path.GetFullPath(APP_FOLDER));
-									};
-									((Grid)smallGrid).Children.Add(btn);
-								}
-							}*/
-						}
-					}
-				}
-			}
-			
-			Debug.WriteLine("\nAdditionally, you can call a specific grid by its name as a variable.\n");
 
 			// TODO: New Grid System Using Grid Names
 		}
@@ -167,7 +116,7 @@ namespace WulffrithLauncher {
 		}
 
 		// Loads File Datas
-		private static string[][] LoadFileDatas(string[] files, int largeCellCount, int mediumCellCount, int smallCellCount, out bool isValid) {
+		private static string[][] LoadFileDatas(string[] files, int width, int height, out bool isValid) {
 			// Count Of File Data Sizes
 			int count = 0;
 
@@ -197,14 +146,14 @@ namespace WulffrithLauncher {
 						filesData[i][2] = "8";
 						break;
 					default:
-						filesData[i][2] = $"{largeCellCount * mediumCellCount * smallCellCount + 1}";
+						filesData[i][2] = $"{width * height + 1}";
 						break;
 				}
 				count += int.Parse(filesData[i][2]);
 			}
 
 			// Checks if count does not surpass max allowed apps
-			if (count > largeCellCount * mediumCellCount * smallCellCount) {
+			if (count > width * height) {
 				isValid = false;
 			} else {
 				isValid = true;
