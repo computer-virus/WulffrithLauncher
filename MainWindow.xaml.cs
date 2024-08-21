@@ -53,6 +53,8 @@ namespace WulffrithLauncher {
 			// Load File Datas
 			string[][] filesData = LoadFileDatas(files, GRID_WIDTH_EFFECTIVE, GRID_HEIGHT_EFFECTIVE, out bool fileSizesValid);
 
+			// TODO: Check if Files Exist
+
 			// Check For File Size Validation
 			if (!fileSizesValid) {
 				// Creates Error Message And Opens File Explorer To Directory On Click
@@ -84,7 +86,9 @@ namespace WulffrithLauncher {
 				return;
 			}
 
-			// TODO: Add Icons
+			// TODO: Check if IMGs Exist
+
+			// Adds Icons To Grid
 			FillGrid(gridIcons, filesData, imgFiles, GRID_WIDTH_ACTUAL, GRID_HEIGHT_ACTUAL, gridContainer, APP_FOLDER, IMG_FOLDER);
 		}
 
@@ -215,6 +219,7 @@ namespace WulffrithLauncher {
 				while (!done) {
 					if (row + size.Height < gridHeight) {
 						if (col + size.Width < gridWidth) {
+							// TODO: Check Not Overlapping Other Buttons
 							AddAppIcon(fileData, size, grid, row, col, imgFolder);
 							col += size.Width + 1;
 							done = true;
@@ -223,11 +228,13 @@ namespace WulffrithLauncher {
 							col = 0;
 						}
 					} else {
+						grid.Children.Clear();
 						ErrorMessage(errGrid, appFolder, [
 							$"App \"{fileData[0]}\" does not fit within the grid height.",
 							"Please adjust app index to fit the app into the grid.",
 							"Click anywhere in the window to open related directory"
 						]);
+						return;
 					}
 				}
 			}
