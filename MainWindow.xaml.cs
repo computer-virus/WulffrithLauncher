@@ -86,12 +86,43 @@ namespace WulffrithLauncher {
 
 			// Reminder How To Access Grid Children
 			Debug.WriteLine($"\nGrids:\n\t{gridLarge.Name}");
-			foreach (Grid mediumGrid in gridLarge.Children) {
-				Debug.WriteLine($"\t\t{mediumGrid.Name}");
-				foreach (Grid smallGrid in mediumGrid.Children) {
-					Debug.WriteLine($"\t\t\t{smallGrid.Name}");
+			/*for (int i = 0; i < 5; i += 2) {
+				for (int j = 0; j < 5; j += 2) {
+					Button btn = new();
+					btn.Background = SetImage(imgFiles[0]);
+					Grid.SetRow(btn, i);
+					Grid.SetColumn(btn, j);
+					gridLarge.Children.Add(btn);
+				}
+			}*/
+
+			foreach (object mediumGrid in gridLarge.Children) {
+				if (mediumGrid is Grid) {
+					Debug.WriteLine($"\t\t{((Grid)mediumGrid).Name}");
+					/*for (int i = 0; i < 3; i += 2) {
+						Button btn = new();
+						btn.Background = SetImage(imgFiles[1]);
+						Grid.SetColumn(btn, i);
+						((Grid)mediumGrid).Children.Add(btn);
+					}*/
+
+					foreach (object smallGrid in ((Grid)mediumGrid).Children) {
+						if (smallGrid is Grid) {
+							Debug.WriteLine($"\t\t\t{((Grid)smallGrid).Name}");
+							/*for (int i = 0; i < 3; i += 2) {
+								for (int j = 0; j < 3; j += 2) {
+									Button btn = new();
+									btn.Background = SetImage(imgFiles[2]);
+									Grid.SetRow(btn, i);
+									Grid.SetColumn(btn, j);
+									((Grid)smallGrid).Children.Add(btn);
+								}
+							}*/
+						}
+					}
 				}
 			}
+			
 			Debug.WriteLine("\nAdditionally, you can call a specific grid by its name as a variable.\n");
 
 			// TODO: New Grid System Using Grid Names
@@ -184,7 +215,6 @@ namespace WulffrithLauncher {
 			Grid.SetRowSpan(btn, 3);
 			Grid.SetColumn(btn, 0);
 			Grid.SetColumnSpan(btn, 3);
-			btn.BorderThickness = new Thickness(0);
 			btn.Padding = new Thickness(4);
 			btn.Content = string.Join(Environment.NewLine, lines);
 			btn.VerticalContentAlignment = VerticalAlignment.Top;
@@ -195,6 +225,11 @@ namespace WulffrithLauncher {
 
 			// Appends To Container
 			container.Children.Add(btn);
+		}
+
+		// Returns New ImageBrush With Image For Background Images
+		private ImageBrush SetImage(string path) {
+			return new ImageBrush(new BitmapImage(new Uri(path, UriKind.RelativeOrAbsolute)));
 		}
 	}
 }

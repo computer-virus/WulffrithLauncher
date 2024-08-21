@@ -16,12 +16,12 @@ The goal is to make the launcher work relatively closely to the Windows 10 tiled
 - Validation For File Count
 - Validation For Panel Size
 - Validation For Image Loading
-- Test Different Children Properties (Using Children)
+- Tested Different Children Properties (Using Children)
 
 ### Planned Implementations (Bare Minimum):
 - New Grid System (Again)
 - Check for Space in grids
-- Use App Data And Image Data To Create Icons On The Grid System w/ Tooltip
+- Use App Data And Image Data To Create Icons On The Grid System
 - Launch Application When Corresponding Icon Is Clicked
 - Validation For App Location
 - Validation For App Image
