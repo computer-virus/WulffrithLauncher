@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.IO;
+﻿using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -302,8 +301,8 @@ namespace WulffrithLauncher {
 			bool overlap = false;
 			foreach (Button child in grid.Children.OfType<Button>()) {
 				// If The A Different Button Is Intersecting Current Button
-				bool outsideHeight = row < Grid.GetRow(child) || row > Grid.GetRow(child) + Grid.GetRowSpan(child);
-				bool outsideWidth = col < Grid.GetColumn(child) || col > Grid.GetColumn(child) + Grid.GetColumnSpan(child);
+				bool outsideHeight = row + Grid.GetRowSpan(btn) < Grid.GetRow(child) || row > Grid.GetRow(child) + Grid.GetRowSpan(child);
+				bool outsideWidth = col + Grid.GetColumnSpan(btn) < Grid.GetColumn(child) || col > Grid.GetColumn(child) + Grid.GetColumnSpan(child);
 				if (child != btn && !outsideHeight && !outsideWidth) {
 					// There's An Overlap
 					overlap = true;
