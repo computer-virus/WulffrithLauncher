@@ -2,6 +2,8 @@
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using MyLibrary;
 
 namespace WulffrithLauncher {
@@ -182,6 +184,7 @@ namespace WulffrithLauncher {
 			Grid.SetRowSpan(btn, 3);
 			Grid.SetColumn(btn, 0);
 			Grid.SetColumnSpan(btn, 3);
+			btn.BorderThickness = new Thickness(0);
 			btn.Padding = new Thickness(4);
 			btn.Content = string.Join(Environment.NewLine, lines);
 			btn.VerticalContentAlignment = VerticalAlignment.Top;
