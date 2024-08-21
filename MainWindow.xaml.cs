@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Diagnostics;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using MyLibrary;
@@ -81,7 +82,7 @@ namespace WulffrithLauncher {
 				return;
 			}
 
-			// TODO: Redo Grid System
+			// TODO: New Grid System Using Grid Names
 		}
 
 		// Closes application when unfocused

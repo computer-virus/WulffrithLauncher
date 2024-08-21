@@ -128,8 +128,6 @@
 				<RowDefinition Height="150*"/>
 			</Grid.RowDefinitions>
 
-			<!-- These Are Here As A Visual Aid. Will Be Deleted Once No Longer Needed. -->
-
 			<!-- Medium Grid 0 -->
 			<Grid Grid.Row="0" Grid.Column="0" x:Name="gridMedium0">
 				<Grid.ColumnDefinitions>
