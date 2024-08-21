@@ -82,6 +82,16 @@ namespace WulffrithLauncher {
 				return;
 			}
 
+			// Reminder How To Access Grid Children
+			Debug.WriteLine($"\nGrids:\n\t{gridLarge.Name}");
+			foreach (Grid mediumGrid in gridLarge.Children) {
+				Debug.WriteLine($"\t\t{mediumGrid.Name}");
+				foreach (Grid smallGrid in mediumGrid.Children) {
+					Debug.WriteLine($"\t\t\t{smallGrid.Name}");
+				}
+			}
+			Debug.WriteLine("\nAdditionally, you can call a specific grid by its name as a variable.\n");
+
 			// TODO: New Grid System Using Grid Names
 		}
 
