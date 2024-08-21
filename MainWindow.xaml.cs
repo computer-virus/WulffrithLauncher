@@ -20,8 +20,10 @@ namespace WulffrithLauncher {
 			const string EXAMPLE_FILE = $@"{APP_FOLDER}\## - ExampleApplication.appdata";
 			const string IMG_FOLDER = $@"{APP_FOLDER}\images";
 
-			const int GRID_WIDTH = 12;
-			const int GRID_HEIGHT = 6;
+			const int GRID_WIDTH_EFFECTIVE = 12;
+			const int GRID_WIDTH_ACTUAL = GRID_WIDTH_EFFECTIVE * 2 - 1;
+			const int GRID_HEIGHT_EFFECTIVE = 6;
+			const int GRID_HEIGHT_ACTUAL = GRID_HEIGHT_EFFECTIVE * 2 - 1;
 
 			// Dynamic Window Scaling and Positioning
 			double screenHeight = SystemParameters.PrimaryScreenHeight;
@@ -50,7 +52,7 @@ namespace WulffrithLauncher {
 			}
 
 			// Load File Datas
-			string[][] filesData = LoadFileDatas(files, GRID_WIDTH, GRID_HEIGHT, out bool fileSizesValid);
+			string[][] filesData = LoadFileDatas(files, GRID_WIDTH_EFFECTIVE, GRID_HEIGHT_EFFECTIVE, out bool fileSizesValid);
 
 			// Check For File Size Validation
 			if (!fileSizesValid) {
@@ -81,6 +83,23 @@ namespace WulffrithLauncher {
 
 				// Returns early
 				return;
+			}
+
+			// Testing Filling Grid With Dummy Apps
+			IconSize size = new IconSize().Small();
+			for (int i = 0; i < GRID_WIDTH_ACTUAL; i += size.Width + 1) {
+				for (int j = 0; j < GRID_HEIGHT_ACTUAL; j += size.Height + 1) {
+					Button btn = new();
+					btn.Click += (s, e) => {
+						MyLib.File.Start("explorer.exe", Path.GetFullPath(APP_FOLDER));
+					};
+					btn.Background = SetImage(imgFiles[0]);
+					Grid.SetColumn(btn, i);
+					Grid.SetColumnSpan(btn, size.Width);
+					Grid.SetRow(btn, j);
+					Grid.SetRowSpan(btn, size.Height);
+					gridIcons.Children.Add(btn);
+				}
 			}
 
 			// TODO: New Grid System Using Grid Names
@@ -188,6 +207,42 @@ namespace WulffrithLauncher {
 		// Returns New ImageBrush With Image For Background Images
 		private ImageBrush SetImage(string path) {
 			return new ImageBrush(new BitmapImage(new Uri(path, UriKind.RelativeOrAbsolute)));
+		}
+	}
+
+	// Used For App Icon Sizes
+	public class IconSize() {
+		private int _width;
+		private int _height;
+
+		public int Width {
+			get {
+				return _width;
+			}
+		}
+
+		public int Height {
+			get {
+				return _height;
+			}
+		}
+
+		public IconSize Large() {
+			_width = 7;
+			_height = 3;
+			return this;
+		}
+
+		public IconSize Medium() {
+			_width = 3;
+			_height = 3;
+			return this;
+		}
+
+		public IconSize Small() {
+			_width = 1;
+			_height = 1;
+			return this;
 		}
 	}
 }
