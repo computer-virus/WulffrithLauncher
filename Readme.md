@@ -1,6 +1,8 @@
-# Wulffrith Launcher
-A W.I.P. launcher application for my friend which I pushed to a repo so he can see the progress.
+# Wulffrith Launcher 1.0
+A launcher application for my friend which I pushed to a repo so he can see the progress.
 The goal is to make the launcher work relatively closely to the Windows 10 tiled start menu.
+The launcher is currently in its initial release state (1.0).
+For the time being, I plan to take a quick break from this project to work on other things.
 
 ## Launcher Roadmap
 
@@ -31,6 +33,17 @@ The goal is to make the launcher work relatively closely to the Windows 10 tiled
 - Implement Acrylic Brush Into WPF For Launcher Background
 - Allow User To Modify App Data and Image Data By Right-Clicking Icon
 - Allow User To Add New Add Data Through The Launcher Rather Than Directory
+
+## Bug Tracker
+
+### Known Unfixed Bugs:
+- None (so far)
+
+### Fixed Bugs:
+- None (so far)
+
+### Report Bugs:
+You can either send bug reports through this repository or to @computer_virus. on Discord.
 
 ## Feature Recommendations
 
