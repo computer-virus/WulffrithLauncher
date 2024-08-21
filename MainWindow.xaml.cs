@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Drawing;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -197,10 +198,10 @@ namespace WulffrithLauncher {
 		}
 
 		// Fills Grid
-		public void FillGrid(Grid grid, string[][] filesData, string[] imgFiles, int gridWidth, int gridHeight, Grid errGrid, string appFolder, string imgFolder) {
-			int row = 0;
-			int col = 0;
+		private void FillGrid(Grid grid, string[][] filesData, string[] imgFiles, int gridWidth, int gridHeight, Grid errGrid, string appFolder, string imgFolder) {
+			// For Each App
 			foreach (string[] fileData in filesData) {
+				// Finds Appropriate Size
 				IconSize size;
 				switch (fileData[2]) {
 					default:
@@ -215,41 +216,52 @@ namespace WulffrithLauncher {
 						break;
 				}
 
+				// Creates Button
+				Button btn = CreateAppIcon(fileData, size, grid, imgFolder);
+
+				// Looks For Empty Spot
 				bool done = false;
 				while (!done) {
-					if (row + size.Height < gridHeight) {
-						if (col + size.Width < gridWidth) {
-							// TODO: Check Not Overlapping Other Buttons
-							AddAppIcon(fileData, size, grid, row, col, imgFolder);
-							col += size.Width + 1;
-							done = true;
-						} else {
-							row += 2;
-							col = 0;
+					for (int row = 0; row < gridHeight && !done; row += 2) {
+						for (int col = 0; col < gridWidth && !done; col += size.Width + 1) {
+							// TODO: Check For Overlap
+							if (true) {
+								// Places Button in Empty Spot
+								Grid.SetRow(btn, row);
+								Grid.SetColumn(btn, col);
+								done = true;
+							}
 						}
-					} else {
-						grid.Children.Clear();
-						ErrorMessage(errGrid, appFolder, [
-							$"App \"{fileData[0]}\" does not fit within the grid height.",
-							"Please adjust app index to fit the app into the grid.",
-							"Click anywhere in the window to open related directory"
-						]);
-						return;
+
+						// If Out Of Space And There's Still More To Add
+						if (row + 2 >= gridHeight && !done) {
+							grid.Children.Clear();
+							
+							ErrorMessage(errGrid, appFolder, [
+								"There are too many apps to fit on the grid.",
+								"Consider removing some apps or reducing their size",
+								"Click anywhere in the window to open related directory."
+							]);
+							
+							return;
+						}
 					}
 				}
 			}
 		}
 
-		// Adds Icon
-		public void AddAppIcon(string[] fileData, IconSize size, Grid grid, int row, int col, string imgFolder) {
+		// Creates Button And Adds It To Grid For It To Be Shifted To Correct Row & Col Later
+		private Button CreateAppIcon(string[] fileData, IconSize size, Grid grid, string imgFolder) {
+			// Button And Click Event
 			Button btn = new();
 			btn.Click += (s, e) => {
 				MyLib.File.Start(fileData[3], fileData[4]);
 			};
 
+			// Background
 			btn.Background = SetImage($@"{imgFolder}\{fileData[1]}");
 
-
+			// Tooltip
 			ToolTip toolTip = new();
 			toolTip.Content = fileData[0];
 			toolTip.Foreground = (SolidColorBrush)(new BrushConverter().ConvertFrom("#e3e3e3") ?? new());
@@ -257,48 +269,51 @@ namespace WulffrithLauncher {
 			toolTip.FontWeight = FontWeights.Bold;
 			btn.ToolTip = toolTip;
 
-			Grid.SetColumn(btn, col);
+			// Size
 			Grid.SetColumnSpan(btn, size.Width);
-			Grid.SetRow(btn, row);
 			Grid.SetRowSpan(btn, size.Height);
 
+			// Adds To Grid (Not Positioned Yet)
 			grid.Children.Add(btn);
+
+			// Returns Button
+			return btn;
 		}
-	}
 
-	// Used For App Icon Sizes
-	public class IconSize() {
-		private int _width;
-		private int _height;
+		// Used For App Icon Sizes
+		private class IconSize() {
+			private int _width;
+			private int _height;
 
-		public int Width {
-			get {
-				return _width;
+			public int Width {
+				get {
+					return _width;
+				}
 			}
-		}
 
-		public int Height {
-			get {
-				return _height;
+			public int Height {
+				get {
+					return _height;
+				}
 			}
-		}
 
-		public IconSize Large() {
-			_width = 7;
-			_height = 3;
-			return this;
-		}
+			public IconSize Large() {
+				_width = 7;
+				_height = 3;
+				return this;
+			}
 
-		public IconSize Medium() {
-			_width = 3;
-			_height = 3;
-			return this;
-		}
+			public IconSize Medium() {
+				_width = 3;
+				_height = 3;
+				return this;
+			}
 
-		public IconSize Small() {
-			_width = 1;
-			_height = 1;
-			return this;
+			public IconSize Small() {
+				_width = 1;
+				_height = 1;
+				return this;
+			}
 		}
 	}
 }
