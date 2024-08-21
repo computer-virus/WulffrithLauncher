@@ -92,6 +92,9 @@ namespace WulffrithLauncher {
 					btn.Background = SetImage(imgFiles[0]);
 					Grid.SetRow(btn, i);
 					Grid.SetColumn(btn, j);
+					btn.Click += (s, e) => {
+						MyLib.File.Start("explorer.exe", Path.GetFullPath(APP_FOLDER));
+					};
 					gridLarge.Children.Add(btn);
 				}
 			}*/
@@ -103,6 +106,9 @@ namespace WulffrithLauncher {
 						Button btn = new();
 						btn.Background = SetImage(imgFiles[1]);
 						Grid.SetColumn(btn, i);
+						btn.Click += (s, e) => {
+							MyLib.File.Start("explorer.exe", Path.GetFullPath(APP_FOLDER));
+						};
 						((Grid)mediumGrid).Children.Add(btn);
 					}*/
 
@@ -115,6 +121,9 @@ namespace WulffrithLauncher {
 									btn.Background = SetImage(imgFiles[2]);
 									Grid.SetRow(btn, i);
 									Grid.SetColumn(btn, j);
+									btn.Click += (s, e) => {
+										MyLib.File.Start("explorer.exe", Path.GetFullPath(APP_FOLDER));
+									};
 									((Grid)smallGrid).Children.Add(btn);
 								}
 							}*/

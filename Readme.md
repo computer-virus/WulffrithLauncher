@@ -22,7 +22,6 @@ The goal is to make the launcher work relatively closely to the Windows 10 tiled
 - New Grid System (Again)
 - Check for Space in grids
 - Use App Data And Image Data To Create Icons On The Grid System
-- Launch Application When Corresponding Icon Is Clicked
 - Validation For App Location
 - Validation For App Image
 
