@@ -21,10 +21,10 @@ The goal is to make the launcher work relatively closely to the Windows 10 tiled
 - Use App Data And Image Data To Create Icons On The Grid System
 - Added Grid Height Validation
 - Added Check for Space in grids
+- Added Image Validation
 
 ### Planned Implementations (Bare Minimum):
 - Validation For App Location
-- Validation For App Image
 
 ### Possible Future Implementations (If I Can Manage It):
 - Add manual launcher window scaling through in-app menu

@@ -54,6 +54,7 @@ namespace WulffrithLauncher {
 			string[][] filesData = LoadFileDatas(files, GRID_WIDTH_EFFECTIVE, GRID_HEIGHT_EFFECTIVE, out bool fileSizesValid);
 
 			// TODO: Check if Files Exist
+			// Current Problem: Windows Apps Like MS Paint Trick Program Into Thinking They're Relative Paths
 
 			// Check For File Size Validation
 			if (!fileSizesValid) {
@@ -85,8 +86,6 @@ namespace WulffrithLauncher {
 				// Returns early
 				return;
 			}
-
-			// TODO: Check if IMGs Exist
 
 			// Adds Icons To Grid
 			FillGrid(gridIcons, filesData, imgFiles, GRID_WIDTH_ACTUAL, GRID_HEIGHT_ACTUAL, gridContainer, APP_FOLDER, IMG_FOLDER);
