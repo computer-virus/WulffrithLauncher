@@ -123,7 +123,7 @@ namespace WulffrithLauncher {
 			MyLib.File.WriteAllLines(file, [
 				"Application Name > Example App",
 				"Image Name > egg.png",
-				"Panel Size (i.e. Small, Medium, Large) > Small",
+				"Panel Size (i.e. Small, Medium, Wide) > Small",
 				"Application Location > Location Goes Here",
 				"Command Line Arguments > -example argument"
 			]);
@@ -170,8 +170,8 @@ namespace WulffrithLauncher {
 					case "Medium":
 						count += (size.Medium().Width / 2 + 1) * (size.Medium().Height / 2 + 1);
 						break;
-					case "Large":
-						count += (size.Large().Width / 2 + 1) * (size.Large().Height / 2 + 1);
+					case "Wide":
+						count += (size.Wide().Width / 2 + 1) * (size.Wide().Height / 2 + 1);
 						break;
 					default:
 						count += width * height + 1;
@@ -234,8 +234,8 @@ namespace WulffrithLauncher {
 					case "Medium":
 						size = new IconSize().Medium();
 						break;
-					case "Large":
-						size = new IconSize().Large();
+					case "Wide":
+						size = new IconSize().Wide();
 						break;
 				}
 
@@ -330,7 +330,7 @@ namespace WulffrithLauncher {
 				}
 			}
 
-			public IconSize Large() {
+			public IconSize Wide() {
 				_width = 7;
 				_height = 3;
 				return this;
