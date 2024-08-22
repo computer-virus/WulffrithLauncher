@@ -30,6 +30,7 @@ For the time being, I plan to take a quick break from this project to work on ot
 
 ### Possible Future Implementations (If I Get To Them):
 - Add manual launcher window scaling through in-app menu
+- Alt Image On Hover Option
 - Improved Indexing System And Allow Users To Drag Icons To Change App Indexes
 - Implement Acrylic Brush Into WPF For Launcher Background
 - Allow User To Modify App Data and Image Data By Right-Clicking Icon
