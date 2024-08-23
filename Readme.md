@@ -39,7 +39,7 @@ For the time being, I plan to take a quick break from this project to work on ot
 ## Bug Tracker
 
 ### Known Unfixed Bugs:
-- None (so far)
+- App still crashes if you don't have the image file in folder but reference it in appdata.
 
 ### Fixed Bugs:
 - None (so far)
