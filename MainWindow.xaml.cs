@@ -44,6 +44,11 @@ namespace WulffrithLauncher {
 					"An example file has been created for you.",
 					"Use the file as a reference for apps you integrate and do not delete the example file.",
 					"",
+					"Additionally, be mindful that certain apps may still be open in the background after you close their window.",
+					"If that happens, you could have multiple instances of that app running which would slow down your computer or do weird things.",
+					"Normally, File Explorer is in that list but I managed to make a work around for it.",
+					"That said, I can't do that for every app.",
+					"",
 					"Click anywhere in the window to open the related directory."
 				]);
 
@@ -63,8 +68,10 @@ namespace WulffrithLauncher {
 						"Please ensure you only provide absolute paths in .appdata files.",
 						"If you added a Windows app such as MS Paint, ensure you use the app's actual absolute path.",
 						"",
-						"Additionally, please refrain from launching certain apps, like Windows Explorer, that don't end their process when you close them.", // Fix
-						"This currently launches multiple instances of that app running in the background. (Which can get real bad.)", // Fix
+						"Additionally, be mindful that certain apps may still be open in the background after you close their window.",
+						"If that happens, you could have multiple instances of that app running which would slow down your computer or do weird things.",
+						"Normally, File Explorer is in that list but I managed to make a work around for it.",
+						"That said, I can't do that for every app.",
 						"",
 						"Click anywhere in the window to open the related directory."
 					]);
@@ -275,11 +282,17 @@ namespace WulffrithLauncher {
 
 		// Creates Button And Adds It To Grid For It To Be Shifted To Correct Row & Col Later
 		private Button CreateAppIcon(string[] fileData, IconSize size, Grid grid, string imgFolder) {
-			// Button And Click Event
+			// Button And Click Event (Prevents Launching Multiple File Explorers)
 			Button btn = new();
-			btn.Click += (s, e) => {
-				MyLib.File.Open(fileData[3], fileData[4]);
-			};
+			if (fileData[3].ToLower().Equals(@"c:\windows\explorer.exe")) {
+				btn.Click += (s, e) => {
+					MyLib.File.Open(fileData[4]);
+				};
+			} else {
+				btn.Click += (s, e) => {
+					MyLib.File.Open(fileData[3], fileData[4]);
+				};
+			}
 
 			// Background
 			string imageFile = $@"{imgFolder}\{fileData[1]}";
