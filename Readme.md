@@ -25,6 +25,7 @@ For the time being, I plan to take a quick break from this project to work on ot
 - Added Image Validation
 - Validation For App Location
 - Added Launcher Icon
+- Added Ability For Launcher To Open Certain File Types Directly
 
 
 ### Possible Future Implementations (If I Get To Them):
