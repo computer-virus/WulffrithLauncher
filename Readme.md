@@ -1,4 +1,4 @@
-# Wulffrith Launcher 1.1
+# Wulffrith Launcher 1.2
 A launcher application for my friend which I pushed to a repo so he can see the progress.
 The goal is to make the launcher work relatively closely to the Windows 10 tiled start menu.
 For the time being, I plan to take a quick break from this project to work on other things.
