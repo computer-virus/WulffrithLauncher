@@ -1,7 +1,6 @@
-# Wulffrith Launcher 1.0
+# Wulffrith Launcher 1.1
 A launcher application for my friend which I pushed to a repo so he can see the progress.
 The goal is to make the launcher work relatively closely to the Windows 10 tiled start menu.
-The launcher is currently in its initial release state (1.0).
 For the time being, I plan to take a quick break from this project to work on other things.
 
 ## Launcher Roadmap
@@ -39,10 +38,10 @@ For the time being, I plan to take a quick break from this project to work on ot
 ## Bug Tracker
 
 ### Known Unfixed Bugs:
-- App still crashes if you don't have the image file in folder but reference it in appdata.
+- None (so far)
 
 ### Fixed Bugs:
-- None (so far)
+- App still crashes if you don't have the image file in folder but reference it in appdata.
 
 ### Report Bugs:
 You can either send bug reports through this repository or to @computer_virus. on Discord.

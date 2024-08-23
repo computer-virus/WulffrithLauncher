@@ -276,7 +276,14 @@ namespace WulffrithLauncher {
 			};
 
 			// Background
-			btn.Background = SetImage($@"{imgFolder}\{fileData[1]}");
+			string imageFile = $@"{imgFolder}\{fileData[1]}";
+			if (File.Exists(imageFile)) {
+				btn.Background = SetImage(imageFile);
+			} else {
+				btn.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#ff0000") ?? new());
+				btn.Foreground = (SolidColorBrush)(new BrushConverter().ConvertFrom("#ffffff") ?? new());
+				btn.Content = "Invalid" + Environment.NewLine + " Image";
+			}
 
 			// Tooltip
 			ToolTip toolTip = new();
