@@ -38,10 +38,11 @@ For the time being, I plan to take a quick break from this project to work on ot
 ## Bug Tracker
 
 ### Known Unfixed Bugs:
-- None (so far)
+- File Explorer Will Launch A New Instance Of Itself And Won't Close (Stacking Up)
 
 ### Fixed Bugs:
 - App still crashes if you don't have the image file in folder but reference it in appdata.
+- Asks User To Use A Shortcut Which Doesn't Work (Switched To Absolute Path)
 
 ### Report Bugs:
 You can either send bug reports through this repository or to @computer_virus. on Discord.

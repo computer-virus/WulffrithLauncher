@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Diagnostics;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -60,7 +61,15 @@ namespace WulffrithLauncher {
 					ErrorMessage(gridContainer, APP_FOLDER, [
 						$"An absolute path for {fileData[0]} was not provided.",
 						"Please ensure you only provide absolute paths in .appdata files.",
-						"If you added a Windows app such as MS Paint or File Explorer, provide an absolute path to a shortcut instead. (Thanks Windows...)",
+						"",
+						"If you added a Windows app such as MS Paint, ensure you use the app's actual absolute path and not a shortened path, shortcut, or environment variable.",
+						"",
+						"In MS Paint's case, that would be something like (exact directory may vary):",
+						@"C:\Program Files\WindowsApps\Microsoft.Paint_11.2404.1020.0_x64__8wekyb3d8bbwe\PaintApp\mspaint.exe",
+						"",
+						"Additionally, please be careful when launching certain apps, like Windows Explorer, that don't end their process when you close them.", // Fix
+						"This currently launches multiple instances of that app running in the background. (Which can get real bad.)", // Fix
+						"",
 						"Click anywhere in the window to open the related directory."
 					]);
 
@@ -205,7 +214,7 @@ namespace WulffrithLauncher {
 			btn.VerticalContentAlignment = VerticalAlignment.Top;
 			btn.HorizontalContentAlignment = HorizontalAlignment.Left;
 			btn.Click += (s, e) => {
-				MyLib.File.Start("explorer.exe", Path.GetFullPath(directory));
+				Process.Start("explorer.exe", Path.GetFullPath(directory)); // Fix
 			};
 			TextBlock txt = new TextBlock();
 			txt.Text = string.Join(Environment.NewLine, lines);
@@ -272,7 +281,7 @@ namespace WulffrithLauncher {
 			// Button And Click Event
 			Button btn = new();
 			btn.Click += (s, e) => {
-				MyLib.File.Start(fileData[3], fileData[4]);
+				Process.Start(fileData[3], fileData[4]); // Fix
 			};
 
 			// Background
