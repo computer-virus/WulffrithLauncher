@@ -171,6 +171,7 @@ namespace WulffrithLauncher {
 						count += (size.Medium().Width / 2 + 1) * (size.Medium().Height / 2 + 1);
 						break;
 					case "Wide":
+					case "Large":
 						count += (size.Wide().Width / 2 + 1) * (size.Wide().Height / 2 + 1);
 						break;
 					default:
@@ -235,6 +236,7 @@ namespace WulffrithLauncher {
 						size = new IconSize().Medium();
 						break;
 					case "Wide":
+					case "Large":
 						size = new IconSize().Wide();
 						break;
 				}
