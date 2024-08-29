@@ -16,8 +16,9 @@ namespace WulffrithLauncher {
 
 			// CONSTS
 			const string APP_FOLDER = "apps";
-			const string EXAMPLE_FILE = $@"{APP_FOLDER}\## - ExampleApplication.appdata";
+			const string EXAMPLE_FILE = $@"{APP_FOLDER}\## - ExampleApplication.appdata", SETTINGS_FILE = $@"{APP_FOLDER}\99 - Launcher Settings (DO NOT EDIT).appdata";
 			const string IMG_FOLDER = $@"{APP_FOLDER}\images";
+			const string SETTINGS_IMG = $@"{IMG_FOLDER}\MoonSettings.png";
 
 			const int GRID_WIDTH_EFFECTIVE = 12;
 			const int GRID_WIDTH_ACTUAL = GRID_WIDTH_EFFECTIVE * 2;
@@ -34,19 +35,21 @@ namespace WulffrithLauncher {
 
 			// Directory Creation
 			Directory.CreateDirectory(IMG_FOLDER);
-			string[] files = GetNonExampleFiles(APP_FOLDER, EXAMPLE_FILE);
+
+			// Load Files
+			string[] files = GetNonExampleFile(APP_FOLDER, EXAMPLE_FILE, SETTINGS_FILE, SETTINGS_IMG);
 
 			// Check Directory For Files
-			if (files.Length < 1) {
+			if (files.Length < 2) {
 				// Creates Error Message And Opens File Explorer To Directory On Click
 				ErrorMessage(gridContainer, APP_FOLDER, [
 					"Please add an .appdata file.",
 					"An example file has been created for you.",
 					"Use the file as a reference for apps you integrate and do not delete the example file.",
 					"",
-					"Additionally, be mindful that certain apps may still be open in the background after you close their window.",
-					"If that happens, you could have multiple instances of that app running which would slow down your computer or do weird things.",
-					"Normally, File Explorer is in that list but I managed to make a work around for it.",
+					"Note that you do not need to specify the supporting application for most paths and doing so could actually be detrimental.",
+					"Attempting, for example, to open a directory by specifying explorer.exe in the path causes multiple instances of explorer.exe (which is not a good thing).",
+					"Instead, input the directory directly into the path and the program should safely use the default support application. (If it doesn't, let me know.)",
 					"That said, I can't do that for every app.",
 					"",
 					"Click anywhere in the window to open the related directory."
@@ -58,39 +61,6 @@ namespace WulffrithLauncher {
 
 			// Load File Datas
 			string[][] filesData = LoadFileDatas(files, GRID_WIDTH_EFFECTIVE, GRID_HEIGHT_EFFECTIVE, out bool fileSizesValid);
-
-			// Checks If File Path Is An Absolute Path And Then If It Exists
-			foreach (string[] fileData in filesData) {
-				if (!Path.IsPathFullyQualified(fileData[3])) {
-					// Creates Error Message And Opens File Explorer To Directory On Click
-					ErrorMessage(gridContainer, APP_FOLDER, [
-						$"An absolute path for {fileData[0]} was not provided.",
-						"Please ensure you only provide absolute paths in .appdata files.",
-						"If you added a Windows app such as MS Paint, ensure you use the app's actual absolute path.",
-						"",
-						"Additionally, be mindful that certain apps may still be open in the background after you close their window.",
-						"If that happens, you could have multiple instances of that app running which would slow down your computer or do weird things.",
-						"Normally, File Explorer is in that list but I managed to make a work around for it.",
-						"That said, I can't do that for every app.",
-						"",
-						"Click anywhere in the window to open the related directory."
-					]);
-
-					// Returns Early
-					return;
-				} else if (!File.Exists(fileData[3])) {
-					// Creates Error Message And Opens File Explorer To Directory On Click
-					ErrorMessage(gridContainer, APP_FOLDER, [
-						$"The absolute path for {fileData[0]} was not found.",
-						"Please ensure the path was written correctly and that the path doesn't require elevated permissions to access.",
-						"",
-						"Click anywhere in the window to open the related directory."
-					]);
-
-					// Returns Early
-					return;
-				}
-			}
 
 			// Check For File Size Validation
 			if (!fileSizesValid) {
@@ -110,7 +80,7 @@ namespace WulffrithLauncher {
 			string[] imgFiles = Directory.GetFiles(IMG_FOLDER);
 
 			// Checks Images Have Been Loaded
-			if (imgFiles.Length == 0) {
+			if (imgFiles.Length < 2) {
 				// Error Message
 				ErrorMessage(gridContainer, IMG_FOLDER, [
 					"No images have been loaded.",
@@ -131,26 +101,36 @@ namespace WulffrithLauncher {
 			Environment.Exit(0);
 		}
 
-		// Creates example file with format reference
-		private static void CreateExampleFile(string file) {
-			MyLib.File.WriteAllLines(file, [
-				"Application Name > Example App",
-				"Image Name > example.png",
+		// Creates example files with format reference
+		private static void CreateExampleFiles(string appFolder, string exampleFile, string settingsFile, string imgFile) {
+			MyLib.File.WriteAllLines(exampleFile, [
+				"Application Name (Doesn't have to be accurate. It's used for a tooltip.) > Example App",
+				"Image Name (Most bitmap image formats work. Does not animate yet.) > example.png",
 				"Panel Size (i.e. Small, Medium, Wide) > Small",
-				@"Application Location > E:\examplefolder\exampleapp.exe",
-				"Command Line Arguments > example argument"
+				@$"Path (Can be any file location, directory, url, etc. This is what gets launched when you click the icon.) > {exampleFile}",
+				"Command Line Arguments > Arguments you want to launch the the app with, like loading an image onto mspaint.exe. Leave empty for no arguments."
 			]);
+
+			MyLib.File.WriteAllLines(settingsFile, [
+				"Application Name > Launcher Settings",
+				"Image Name > MoonSettings.png",
+				"Panel Size > Small",
+				@$"Directory > {appFolder}",
+				"Arguements > "
+			]);
+
+			File.WriteAllBytes(imgFile, ImageDataManager.GetSettingImgBytes());
 		}
 
-		// Gets all file locations excluding the example file
-		private static string[] GetNonExampleFiles(string folder, string exampleFile) {
+		// Gets all file locations excluding the example files
+		private static string[] GetNonExampleFile(string appFolder, string exampleFile, string settingsFile, string imgFile) {
 			if (File.Exists(exampleFile)) {
 				File.Delete(exampleFile);
 			}
 
-			string[] files = Directory.GetFiles(folder);
+			string[] files = Directory.GetFiles(appFolder);
 
-			CreateExampleFile(exampleFile);
+			CreateExampleFiles(appFolder, exampleFile, settingsFile, imgFile);
 
 			return files;
 		}
@@ -194,10 +174,10 @@ namespace WulffrithLauncher {
 			}
 
 			// Checks if count does not surpass max allowed apps
-			if (count > width * height) {
-				isValid = false;
-			} else {
+			if (count < width * height) {
 				isValid = true;
+			} else {
+				isValid = false;
 			}
 
 			// Returns FileDatas
@@ -255,13 +235,13 @@ namespace WulffrithLauncher {
 				}
 
 				// Creates Button
-				Button btn = CreateAppIcon(fileData, size, grid, imgFolder);
+				Button btn = CreateAppIcon(fileData, size, grid, imgFolder, appFolder, errGrid);
 
 				// Loops Through Grid
 				IconSize step = new IconSize().Small();
-				for (int row = 0; row < gridHeight; row += step.Height + 1) {
+				for (int row = 0; row + size.Height - 1 < gridHeight; row += step.Height + 1) {
 					bool done = false;
-					for (int col = 0; col < gridWidth && !done; col += step.Width + 1) {
+					for (int col = 0; col + size.Width - 1 < gridWidth && !done; col += step.Width + 1) {
 						// Sets Grid To Current Position
 						Grid.SetRow(btn, row);
 						Grid.SetColumn(btn, col);
@@ -281,18 +261,23 @@ namespace WulffrithLauncher {
 		}
 
 		// Creates Button And Adds It To Grid For It To Be Shifted To Correct Row & Col Later
-		private Button CreateAppIcon(string[] fileData, IconSize size, Grid grid, string imgFolder) {
+		private Button CreateAppIcon(string[] fileData, IconSize size, Grid grid, string imgFolder, string appFolder, Grid errGrid) {
 			// Button And Click Event (Prevents Launching Multiple File Explorers)
 			Button btn = new();
-			if (fileData[3].ToLower().Equals(@"c:\windows\explorer.exe")) {
-				btn.Click += (s, e) => {
-					MyLib.File.Open(fileData[4]);
-				};
-			} else {
-				btn.Click += (s, e) => {
+			btn.Click += (s, e) => {
+				// Reactive File Validation For More Freedom
+				try {
 					MyLib.File.Open(fileData[3], fileData[4]);
-				};
-			}
+				} catch {
+					grid.Children.Clear();
+					ErrorMessage(errGrid, appFolder, [
+						"Something went wrong launching the selected app.",
+						"Please ensure you correctly wrote the path into the .appdata file.",
+						"",
+						"Click anywhere in the window to open the related directory"
+					]);
+				}
+			};
 
 			// Background
 			string imageFile = $@"{imgFolder}\{fileData[1]}";

@@ -1,4 +1,4 @@
-# Wulffrith Launcher 1.2
+# Wulffrith Launcher 1.3
 A launcher application for my friend which I pushed to a repo so he can see the progress.
 The goal is to make the launcher work relatively closely to the Windows 10 tiled start menu.
 For the time being, I plan to take a quick break from this project to work on other things.
@@ -23,9 +23,10 @@ For the time being, I plan to take a quick break from this project to work on ot
 - Added Grid Height Validation
 - Added Check for Space in grids
 - Added Image Validation
-- Validation For App Location
 - Added Launcher Icon
 - Added Ability For Launcher To Open Certain File Types Directly
+- Switched To Reactive App Validation To Allow Greater Freedom And Simplicity For The User
+- Launcher Makes Launcher Settings App For User By Default
 
 
 ### Possible Future Implementations (If I Get To Them):
@@ -44,7 +45,8 @@ For the time being, I plan to take a quick break from this project to work on ot
 ### Fixed Bugs:
 - App still crashes if you don't have the image file in folder but reference it in appdata
 - Asks User To Use A Shortcut Which Doesn't Work (Switched To Absolute Path)
-- File Explorer Will Launch A New Instance Of Itself And Won't Close (This doesn't fix other apps with a similar behaviour so be cautious)
+- File Explorer Will Launch A New Instance Of Itself And Won't Close (Workaround now has you not launch these support apps directly.)
+- Fixed a bug that caused app icons to shrink near the border of the grid
 
 ### Report Bugs:
 You can either send bug reports through this repository or to @computer_virus. on Discord.
