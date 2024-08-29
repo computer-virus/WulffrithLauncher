@@ -93,7 +93,7 @@ namespace WulffrithLauncher {
 			}
 
 			// Adds Icons To Grid
-			FillGrid(gridIcons, filesData, imgFiles, GRID_WIDTH_ACTUAL, GRID_HEIGHT_ACTUAL, gridContainer, APP_FOLDER, IMG_FOLDER);
+			FillGrid(gridIcons, files, filesData, imgFiles, GRID_WIDTH_ACTUAL, GRID_HEIGHT_ACTUAL, gridContainer, APP_FOLDER, IMG_FOLDER);
 		}
 
 		// Closes application when unfocused
@@ -215,8 +215,9 @@ namespace WulffrithLauncher {
 		}
 
 		// Fills Grid
-		private void FillGrid(Grid grid, string[][] filesData, string[] imgFiles, int gridWidth, int gridHeight, Grid errGrid, string appFolder, string imgFolder) {
+		private void FillGrid(Grid grid, string[] files, string[][] filesData, string[] imgFiles, int gridWidth, int gridHeight, Grid errGrid, string appFolder, string imgFolder) {
 			// For Each App
+			int count = 0;
 			foreach (string[] fileData in filesData) {
 				// Finds Appropriate Size
 				IconSize size;
@@ -235,7 +236,7 @@ namespace WulffrithLauncher {
 				}
 
 				// Creates Button
-				Button btn = CreateAppIcon(fileData, size, grid, imgFolder, appFolder, errGrid);
+				Button btn = CreateAppIcon(files[count], fileData, size, grid, imgFolder, appFolder, errGrid);
 
 				// Loops Through Grid
 				IconSize step = new IconSize().Small();
@@ -257,13 +258,17 @@ namespace WulffrithLauncher {
 						break;
 					}
 				}
+
+				count++;
 			}
 		}
 
 		// Creates Button And Adds It To Grid For It To Be Shifted To Correct Row & Col Later
-		private Button CreateAppIcon(string[] fileData, IconSize size, Grid grid, string imgFolder, string appFolder, Grid errGrid) {
-			// Button And Click Event (Prevents Launching Multiple File Explorers)
+		private Button CreateAppIcon(string file, string[] fileData, IconSize size, Grid grid, string imgFolder, string appFolder, Grid errGrid) {
+			// Button And Click Events (Prevents Launching Multiple File Explorers)
 			Button btn = new();
+
+			// Left Click
 			btn.Click += (s, e) => {
 				// Reactive File Validation For More Freedom
 				try {
@@ -277,6 +282,12 @@ namespace WulffrithLauncher {
 						"Click anywhere in the window to open the related directory"
 					]);
 				}
+			};
+
+			// Right Click
+			btn.MouseRightButtonUp += (s, e) => {
+				MyLib.File.Open(file);
+				MyLib.File.Open(imgFolder);
 			};
 
 			// Background

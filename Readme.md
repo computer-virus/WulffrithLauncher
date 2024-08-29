@@ -1,4 +1,4 @@
-# Wulffrith Launcher 1.3
+# Wulffrith Launcher 1.4
 A launcher application for my friend which I pushed to a repo so he can see the progress.
 The goal is to make the launcher work relatively closely to the Windows 10 tiled start menu.
 For the time being, I plan to take a quick break from this project to work on other things.
@@ -27,6 +27,7 @@ For the time being, I plan to take a quick break from this project to work on ot
 - Added Ability For Launcher To Open Certain File Types Directly
 - Switched To Reactive App Validation To Allow Greater Freedom And Simplicity For The User
 - Launcher Makes Launcher Settings App For User By Default
+- Allow User To Modify App Data and Image Data By Right-Clicking Icon
 
 
 ### Possible Future Implementations (If I Get To Them):
@@ -34,8 +35,7 @@ For the time being, I plan to take a quick break from this project to work on ot
 - Alt Image On Hover Option
 - Improved Indexing System And Allow Users To Drag Icons To Change App Indexes
 - Implement Acrylic Brush Into WPF For Launcher Background
-- Allow User To Modify App Data and Image Data By Right-Clicking Icon
-- Allow User To Add New Add Data Through The Launcher Rather Than Directory
+- Allow User To Add New App Data Through The Launcher Rather Than Directory
 
 ## Bug Tracker
 
