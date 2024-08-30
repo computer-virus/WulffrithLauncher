@@ -1,7 +1,12 @@
 # Wulffrith Launcher 1.4
 A launcher application for my friend which I pushed to a repo so he can see the progress.
 The goal is to make the launcher work relatively closely to the Windows 10 tiled start menu.
-For the time being, I plan to take a quick break from this project to work on other things.
+
+The launcher has gotten to a point where it is useable enough for me to be satisfied with it.
+Which means, this is the final update I will be doing on this project for a good while.
+That said, I may get to the rest of the implementations on the roadmap but I don't see these as necessary right now and I'd like to move on to other things for the time being.
+
+I worked really hard on this so I hope you like the launcher and can make some use of it.
 
 ## Launcher Roadmap
 
@@ -27,7 +32,7 @@ For the time being, I plan to take a quick break from this project to work on ot
 - Added Ability For Launcher To Open Certain File Types Directly
 - Switched To Reactive App Validation To Allow Greater Freedom And Simplicity For The User
 - Launcher Makes Launcher Settings App For User By Default
-- Allow User To Modify App Data and Image Data By Right-Clicking Icon
+- User Can Modify App Data and Image Data By Right-Clicking Icon
 
 
 ### Possible Future Implementations (If I Get To Them):
@@ -44,7 +49,7 @@ For the time being, I plan to take a quick break from this project to work on ot
 
 ### Fixed Bugs:
 - App still crashes if you don't have the image file in folder but reference it in appdata
-- Asks User To Use A Shortcut Which Doesn't Work (Switched To Absolute Path)
+- Asks User To Use A Shortcut Which Doesn't Work (Reworked Path System)
 - File Explorer Will Launch A New Instance Of Itself And Won't Close (Workaround now has you not launch these support apps directly.)
 - Fixed a bug that caused app icons to shrink near the border of the grid
 
@@ -56,6 +61,7 @@ You can either send bug reports through this repository or to @computer_virus. o
 ### Contact Information
 Any additional feature recommendations can be sent to @computer_virus. on Discord or through this repository.
 If I do add your recommended feature (or plan to add it), you'll see it listed in the Launcher Roadmap above.
+Be aware that you won't see it be added to this repository for a while during the time I take my break.
 
 ### Feature Restrictions
 Note that I may not add your feature recommendation if it would vastly exceed my budgeted time and effort for the project or if it would be inappropriate.
@@ -77,6 +83,7 @@ You also may distribute this launcher or a modified copy of this launcher grante
 As of writing this, I'm the only one working on code for this project.
 My friend has given me his suggestions in regards to the UI and features, many of which you'll see on the roadmap.
 If you're interested in aiding me in the project, you can contact @computer_virus. on Discord or through this repository.
+I'll let you know when I plan to start working on this again and we can start on some stuff.
 
 ### Future Projects
 I do not currently plan on making many more publicly available projects for a while as I am currently going through post-secondary.
