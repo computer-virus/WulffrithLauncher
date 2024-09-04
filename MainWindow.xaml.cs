@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using Microsoft.Win32;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -11,14 +12,17 @@ namespace WulffrithLauncher {
 	/// </summary>
 	public partial class MainWindow : Window {
 		public MainWindow() {
+
 			// Standard Component Initialization
 			InitializeComponent();
-
+			
 			// CONSTS
 			const string APP_FOLDER = "apps";
 			const string EXAMPLE_FILE = $@"{APP_FOLDER}\## - ExampleApplication.appdata", SETTINGS_FILE = $@"{APP_FOLDER}\99 - Launcher Settings (DO NOT EDIT).appdata";
 			const string IMG_FOLDER = $@"{APP_FOLDER}\images";
 			const string SETTINGS_IMG = $@"{IMG_FOLDER}\MoonSettings.png";
+			const string LAUNCHER_BEHAVIOURS_FOLDER = "launcher settings";
+			const string AUTO_RUN_FILE = $@"{LAUNCHER_BEHAVIOURS_FOLDER}\autorun.bool";
 
 			const int GRID_WIDTH_EFFECTIVE = 12;
 			const int GRID_WIDTH_ACTUAL = GRID_WIDTH_EFFECTIVE * 2;
@@ -35,6 +39,10 @@ namespace WulffrithLauncher {
 
 			// Directory Creation
 			Directory.CreateDirectory(IMG_FOLDER);
+			Directory.CreateDirectory(LAUNCHER_BEHAVIOURS_FOLDER);
+
+			// Registry Key To Auto-Run On Startup If Auto-Run Is Set To True In Launcher Behaviours Folder
+			SetAutoLaunch(AUTO_RUN_FILE);
 
 			// Load Files
 			string[] files = GetNonExampleFile(APP_FOLDER, EXAMPLE_FILE, SETTINGS_FILE, SETTINGS_IMG);
@@ -94,12 +102,46 @@ namespace WulffrithLauncher {
 
 			// Adds Icons To Grid
 			FillGrid(gridIcons, files, filesData, imgFiles, GRID_WIDTH_ACTUAL, GRID_HEIGHT_ACTUAL, gridContainer, APP_FOLDER, IMG_FOLDER);
+
+			// Auto Minimize Window When Done
+			WindowState = WindowState.Minimized;
 		}
 
-		// Closes application when unfocused
-		private void OnUnfocus(object sender, EventArgs e) {
-			Environment.Exit(0);
+		// Creates autorun file if not exist and sets app to autorun on startup if file value is true
+		private void SetAutoLaunch(string file) {
+			// Default is false
+			bool autorun = false;
+			
+			// Set based on file
+			if (File.Exists(file)) {
+				string[] data = File.ReadAllLines(file);
+				try {
+					autorun = bool.Parse(data[0]);
+				} catch {
+					MyLib.File.WriteAllLines(file, ["" + autorun]);
+				}
+			} else {
+				MyLib.File.WriteAllLines(file, ["" + autorun]);
+			}
+
+			// If true, create Registry Key and Set Value
+			string appName = "WulffrithLauncher";
+			string execPath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + @"\WulffrithLauncher.exe";
+			RegistryKey? reg = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
+			if (reg != null && autorun) {
+				reg.SetValue(appName, execPath);
+				reg.Close();
+			} else if (reg != null) {
+				reg.DeleteValue(appName, false);
+			}
 		}
+
+		// Minimizes application when unfocused
+		private void OnUnfocus(object sender, EventArgs e) {
+			WindowState = WindowState.Minimized;
+		}
+
+		// TO DO: Refresh Button That Clears Icon Grid And Calls All Loading Methods Again
 
 		// Creates example files with format reference
 		private static void CreateExampleFiles(string appFolder, string exampleFile, string settingsFile, string imgFile) {
