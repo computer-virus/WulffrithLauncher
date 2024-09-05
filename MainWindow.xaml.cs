@@ -17,7 +17,6 @@ namespace WulffrithLauncher {
 		private const string IMG_FOLDER = $@"{APP_FOLDER}\images";
 		private const string SETTINGS_IMG = $@"{IMG_FOLDER}\Settings.png", REFRESH_IMG = $@"{IMG_FOLDER}\Refresh.png", APP_SETTINGS_IMG = $@"{IMG_FOLDER}\AppSettings.png", FORCE_QUIT_IMG = $@"{IMG_FOLDER}\ForceQuit.png";
 		private const string LAUNCHER_SETTINGS_FOLDER = "launcher settings";
-		private const string AUTORUN_FILE = $@"{LAUNCHER_SETTINGS_FOLDER}\autorun.bool";
 
 		private const int GRID_WIDTH_EFFECTIVE = 12;
 		private const int GRID_WIDTH_ACTUAL = GRID_WIDTH_EFFECTIVE * 2;
