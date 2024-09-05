@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using MyLibrary;
+using System.Diagnostics;
 
 namespace WulffrithLauncher {
 	/// <summary>
@@ -16,7 +17,7 @@ namespace WulffrithLauncher {
 		private const string APP_FOLDER = "apps";
 		private const string EXAMPLE_FILE = $@"{APP_FOLDER}\## - ExampleApplication.appdata";
 		private const string IMG_FOLDER = $@"{APP_FOLDER}\images";
-		private const string APP_SETTINGS_IMG = $@"{IMG_FOLDER}\Settings.png", REFRESH_IMG = $@"{IMG_FOLDER}\Refresh.png";
+		private const string SETTINGS_IMG = $@"{IMG_FOLDER}\Settings.png", REFRESH_IMG = $@"{IMG_FOLDER}\Refresh.png", APP_SETTINGS_IMG = $@"{IMG_FOLDER}\AppSettings.png", FORCE_QUIT_IMG = $@"{IMG_FOLDER}\ForceQuit.png";
 		private const string LAUNCHER_SETTINGS_FOLDER = "launcher settings";
 		private const string AUTORUN_FILE = $@"{LAUNCHER_SETTINGS_FOLDER}\autorun.bool";
 
@@ -46,10 +47,14 @@ namespace WulffrithLauncher {
 
 			// Add Images To Settings Buttons
 			CreateSettingsBarImages();
-			launcherSettingsBtn.Background = SetImage(APP_SETTINGS_IMG);
+			launcherSettingsBtn.Background = SetImage(SETTINGS_IMG);
 			launcherSettingsBtn.Content = "";
 			refreshBtn.Background = SetImage(REFRESH_IMG);
 			refreshBtn.Content = "";
+			appSettingsBtn.Background = SetImage(APP_SETTINGS_IMG);
+			appSettingsBtn.Content = "";
+			forceQuitBtn.Background = SetImage(FORCE_QUIT_IMG);
+			forceQuitBtn.Content = "";
 
 			// Auto Minimize Window Because It Was Launched Using AutoRun
 			if (autorun) {
@@ -126,8 +131,10 @@ namespace WulffrithLauncher {
 
 		// Creates Settings Bar Images
 		private void CreateSettingsBarImages() {
-			File.WriteAllBytes(APP_SETTINGS_IMG, ImageDataManager.GetSettingImgBytes());
+			File.WriteAllBytes(SETTINGS_IMG, ImageDataManager.GetSettingsImgBytes());
 			File.WriteAllBytes(REFRESH_IMG, ImageDataManager.GetRefreshImgBytes());
+			File.WriteAllBytes(APP_SETTINGS_IMG, ImageDataManager.GetAppSettingsImgBytes());
+			File.WriteAllBytes(FORCE_QUIT_IMG, ImageDataManager.GetForceQuitImgBytes());
 		}
 
 		// Creates autorun file if not exist and sets app to autorun on startup if file value is true
@@ -149,9 +156,9 @@ namespace WulffrithLauncher {
 
 			// If true, create Registry Key and Set Value
 			string appName = "WulffrithLauncher";
-			string execPath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + @"\WulffrithLauncher.exe";
+			string? execPath = Environment.ProcessPath;
 			RegistryKey? reg = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
-			if (autorun) {
+			if (autorun && execPath != null) {
 				reg?.SetValue(appName, execPath);
 				reg?.Close();
 			} else {

@@ -176,7 +176,7 @@
 			<!-- Quit Button -->
 			<Button Grid.Column="7" x:Name="forceQuitBtn" Content="Quit" Background="#3f3f3f" Click="forceQuitBtn_Click">
 				<Button.ToolTip>
-					<ToolTip Content="Quit Launcher" FontWeight="Bold" Foreground="#e3e3e3" Background="#04060c"/>
+					<ToolTip Content="Force Quit Launcher" FontWeight="Bold" Foreground="#e3e3e3" Background="#04060c"/>
 				</Button.ToolTip>
 			</Button>
 		</Grid>
