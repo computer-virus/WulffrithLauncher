@@ -42,21 +42,23 @@ namespace WulffrithLauncher {
 			Directory.CreateDirectory(LAUNCHER_SETTINGS_FOLDER);
 
 			// Load Application Data From Directories
-			Load();
+			bool autorun = Load();
 
 			// Add Images To Settings Buttons
 			CreateSettingsBarImages();
 			launcherSettingsBtn.Background = SetImage(APP_SETTINGS_IMG);
 			launcherSettingsBtn.Content = "";
 
-			// Auto Minimize Window When Done
-			WindowState = WindowState.Minimized;
+			// Auto Minimize Window Because It Was Launched Using AutoRun
+			if (autorun) {
+				WindowState = WindowState.Minimized;
+			}
 		}
 
 		// Loads Application Data Onto Application
-		private void Load() {
+		private bool Load() {
 			// Registry Key To Auto-Run On Startup If Auto-Run Is Set To True In Launcher Settings Folder
-			SetAutoLaunch(AUTORUN_FILE);
+			bool autorun = GetAutoLaunch(AUTORUN_FILE);
 
 			// Load Files
 			string[] files = GetNonExampleFile(APP_FOLDER, EXAMPLE_FILE);
@@ -78,7 +80,7 @@ namespace WulffrithLauncher {
 				]);
 
 				// Returns Early
-				return;
+				return false;
 			}
 
 			// Load File Datas
@@ -95,7 +97,7 @@ namespace WulffrithLauncher {
 				]);
 
 				// Returns Early
-				return;
+				return false;
 			}
 
 			// Get Images From Image Directory
@@ -111,11 +113,13 @@ namespace WulffrithLauncher {
 				]);
 
 				// Returns early
-				return;
+				return false;
 			}
 
 			// Adds Icons To Grid
 			FillGrid(gridIcons, files, filesData, imgFiles, GRID_WIDTH_ACTUAL, GRID_HEIGHT_ACTUAL, gridContainer, APP_FOLDER, IMG_FOLDER);
+
+			return autorun;
 		}
 
 		// Creates Settings Bar Images
@@ -124,10 +128,10 @@ namespace WulffrithLauncher {
 		}
 
 		// Creates autorun file if not exist and sets app to autorun on startup if file value is true
-		private void SetAutoLaunch(string file) {
+		private bool GetAutoLaunch(string file) {
 			// Default is false
 			bool autorun = false;
-			
+
 			// Set based on file
 			if (File.Exists(file)) {
 				string[] data = File.ReadAllLines(file);
@@ -144,12 +148,13 @@ namespace WulffrithLauncher {
 			string appName = "WulffrithLauncher";
 			string execPath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + @"\WulffrithLauncher.exe";
 			RegistryKey? reg = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
-			if (reg != null && autorun) {
-				reg.SetValue(appName, execPath);
-				reg.Close();
-			} else if (reg != null) {
-				reg.DeleteValue(appName, false);
+			if (autorun) {
+				reg?.SetValue(appName, execPath);
+				reg?.Close();
+			} else {
+				reg?.DeleteValue(appName, false);
 			}
+			return autorun;
 		}
 
 		// Minimizes application when unfocused
