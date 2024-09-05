@@ -15,8 +15,8 @@ namespace WulffrithLauncher {
 		private const string APP_FOLDER = "apps";
 		private const string EXAMPLE_FILE = $@"{APP_FOLDER}\## - ExampleApplication.appdata";
 		private const string IMG_FOLDER = $@"{APP_FOLDER}\images";
-		private const string SETTINGS_IMG = $@"{IMG_FOLDER}\Settings.png", REFRESH_IMG = $@"{IMG_FOLDER}\Refresh.png", APP_SETTINGS_IMG = $@"{IMG_FOLDER}\AppSettings.png", FORCE_QUIT_IMG = $@"{IMG_FOLDER}\ForceQuit.png";
 		private const string LAUNCHER_SETTINGS_FOLDER = "launcher settings";
+		private const string LAUNCHER_BACKGROUND_IMG = $@"{LAUNCHER_SETTINGS_FOLDER}\background.png", SETTINGS_IMG = $@"{LAUNCHER_SETTINGS_FOLDER}\Settings.png", REFRESH_IMG = $@"{LAUNCHER_SETTINGS_FOLDER}\Refresh.png", APP_SETTINGS_IMG = $@"{LAUNCHER_SETTINGS_FOLDER}\AppSettings.png", FORCE_QUIT_IMG = $@"{LAUNCHER_SETTINGS_FOLDER}\ForceQuit.png";
 
 		private const int GRID_WIDTH_EFFECTIVE = 12;
 		private const int GRID_WIDTH_ACTUAL = GRID_WIDTH_EFFECTIVE * 2;
@@ -42,8 +42,9 @@ namespace WulffrithLauncher {
 			// Load Application Data From Directories
 			Load();
 
-			// Add Images To Settings Buttons
-			CreateSettingsBarImages();
+			// Launcher Images
+			CreateProgramImages();
+			mainWindow.Background = SetImage(LAUNCHER_BACKGROUND_IMG);
 			launcherSettingsBtn.Background = SetImage(SETTINGS_IMG);
 			launcherSettingsBtn.Content = "";
 			refreshBtn.Background = SetImage(REFRESH_IMG);
@@ -114,16 +115,25 @@ namespace WulffrithLauncher {
 
 			// Adds Icons To Grid
 			FillGrid(gridIcons, files, filesData, imgFiles, GRID_WIDTH_ACTUAL, GRID_HEIGHT_ACTUAL, gridContainer, APP_FOLDER, IMG_FOLDER);
-
-			return;
 		}
 
 		// Creates Settings Bar Images
-		private void CreateSettingsBarImages() {
-			System.IO.File.WriteAllBytes(SETTINGS_IMG, ImageDataManager.GetSettingsImgBytes());
-			System.IO.File.WriteAllBytes(REFRESH_IMG, ImageDataManager.GetRefreshImgBytes());
-			System.IO.File.WriteAllBytes(APP_SETTINGS_IMG, ImageDataManager.GetAppSettingsImgBytes());
-			System.IO.File.WriteAllBytes(FORCE_QUIT_IMG, ImageDataManager.GetForceQuitImgBytes());
+		private void CreateProgramImages() {
+			if (!File.Exists(LAUNCHER_BACKGROUND_IMG)) {
+				File.WriteAllBytes(LAUNCHER_BACKGROUND_IMG, ImageDataManager.GetLauncherBackgroundImgBytes());
+			}
+			if (!File.Exists(SETTINGS_IMG)) {
+				File.WriteAllBytes(SETTINGS_IMG, ImageDataManager.GetSettingsImgBytes());
+			}
+			if (!File.Exists(REFRESH_IMG)) {
+				File.WriteAllBytes(REFRESH_IMG, ImageDataManager.GetRefreshImgBytes());
+			}
+			if (!File.Exists(APP_SETTINGS_IMG)) {
+				File.WriteAllBytes(APP_SETTINGS_IMG, ImageDataManager.GetAppSettingsImgBytes());
+			}
+			if (!File.Exists(FORCE_QUIT_IMG)) {
+				File.WriteAllBytes(FORCE_QUIT_IMG, ImageDataManager.GetForceQuitImgBytes());
+			}
 		}
 
 		// Minimizes application when unfocused

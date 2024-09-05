@@ -11,7 +11,6 @@ I worked really hard on this so I hope you like the launcher and can make some u
 ## Launcher Roadmap
 
 ### Current Implementations:
-- Semi-Transparent Background
 - Always Topmost Window
 - Directory For App Data Storage
 - Loading Data From Files Into Temporary Memory
@@ -33,6 +32,7 @@ I worked really hard on this so I hope you like the launcher and can make some u
 - Switched To Reactive App Validation To Allow Greater Freedom And Simplicity For The User
 - User Can Modify App Data and Image Data By Right-Clicking Icon
 - Added Launcher Settings Bar
+- Adjustable Icons And Background
 
 ### Possible Future Implementations (If I Get To Them):
 - Add manual launcher window scaling through in-app menu
