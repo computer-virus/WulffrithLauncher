@@ -16,7 +16,7 @@ namespace WulffrithLauncher {
 		private const string EXAMPLE_FILE = $@"{APP_FOLDER}\## - ExampleApplication.appdata";
 		private const string IMG_FOLDER = $@"{APP_FOLDER}\images";
 		private const string LAUNCHER_SETTINGS_FOLDER = "launcher settings";
-		private const string LAUNCHER_BACKGROUND_IMG = $@"{LAUNCHER_SETTINGS_FOLDER}\background.png", SETTINGS_IMG = $@"{LAUNCHER_SETTINGS_FOLDER}\Settings.png", REFRESH_IMG = $@"{LAUNCHER_SETTINGS_FOLDER}\Refresh.png", APP_SETTINGS_IMG = $@"{LAUNCHER_SETTINGS_FOLDER}\AppSettings.png", FORCE_QUIT_IMG = $@"{LAUNCHER_SETTINGS_FOLDER}\ForceQuit.png";
+		private const string LAUNCHER_BACKGROUND_IMG = $@"{LAUNCHER_SETTINGS_FOLDER}\Background.png", SETTINGS_IMG = $@"{LAUNCHER_SETTINGS_FOLDER}\Settings.png", APP_SETTINGS_IMG = $@"{LAUNCHER_SETTINGS_FOLDER}\AppSettings.png", FORCE_QUIT_IMG = $@"{LAUNCHER_SETTINGS_FOLDER}\ForceQuit.png";
 
 		private const int GRID_WIDTH_EFFECTIVE = 12;
 		private const int GRID_WIDTH_ACTUAL = GRID_WIDTH_EFFECTIVE * 2;
@@ -47,8 +47,6 @@ namespace WulffrithLauncher {
 			mainWindow.Background = SetImage(LAUNCHER_BACKGROUND_IMG);
 			launcherSettingsBtn.Background = SetImage(SETTINGS_IMG);
 			launcherSettingsBtn.Content = "";
-			refreshBtn.Background = SetImage(REFRESH_IMG);
-			refreshBtn.Content = "";
 			appSettingsBtn.Background = SetImage(APP_SETTINGS_IMG);
 			appSettingsBtn.Content = "";
 			forceQuitBtn.Background = SetImage(FORCE_QUIT_IMG);
@@ -124,9 +122,6 @@ namespace WulffrithLauncher {
 			}
 			if (!File.Exists(SETTINGS_IMG)) {
 				File.WriteAllBytes(SETTINGS_IMG, ImageDataManager.GetSettingsImgBytes());
-			}
-			if (!File.Exists(REFRESH_IMG)) {
-				File.WriteAllBytes(REFRESH_IMG, ImageDataManager.GetRefreshImgBytes());
 			}
 			if (!File.Exists(APP_SETTINGS_IMG)) {
 				File.WriteAllBytes(APP_SETTINGS_IMG, ImageDataManager.GetAppSettingsImgBytes());
@@ -421,13 +416,6 @@ namespace WulffrithLauncher {
 		// Opens Launcher Settings Folder When Button Clicked
 		private void launcherSettingsBtn_Click(object sender, RoutedEventArgs e) {
 			MyLib.File.Open(LAUNCHER_SETTINGS_FOLDER);
-		}
-
-		// Refresh Button Method That Clears Icon Grid And Calls All Loading Methods Again
-		private void refreshBtn_Click(object sender, RoutedEventArgs e) {
-			gridIcons.Children.Clear();
-
-			Load();
 		}
 	}
 }
