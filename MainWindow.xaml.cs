@@ -11,44 +11,58 @@ namespace WulffrithLauncher {
 	///		Interaction logic for MainWindow.xaml
 	/// </summary>
 	public partial class MainWindow : Window {
-		public MainWindow() {
 
+		// CONSTS
+		private const string APP_FOLDER = "apps";
+		private const string EXAMPLE_FILE = $@"{APP_FOLDER}\## - ExampleApplication.appdata";
+		private const string IMG_FOLDER = $@"{APP_FOLDER}\images";
+		private const string APP_SETTINGS_IMG = $@"{IMG_FOLDER}\MoonSettings.png";
+		private const string LAUNCHER_SETTINGS_FOLDER = "launcher settings";
+		private const string AUTORUN_FILE = $@"{LAUNCHER_SETTINGS_FOLDER}\autorun.bool";
+
+		private const int GRID_WIDTH_EFFECTIVE = 12;
+		private const int GRID_WIDTH_ACTUAL = GRID_WIDTH_EFFECTIVE * 2;
+		private const int GRID_HEIGHT_EFFECTIVE = 6;
+		private const int GRID_HEIGHT_ACTUAL = GRID_HEIGHT_EFFECTIVE * 2;
+
+		public MainWindow() {
 			// Standard Component Initialization
 			InitializeComponent();
-			
-			// CONSTS
-			const string APP_FOLDER = "apps";
-			const string EXAMPLE_FILE = $@"{APP_FOLDER}\## - ExampleApplication.appdata", SETTINGS_FILE = $@"{APP_FOLDER}\99 - Launcher Settings (DO NOT EDIT).appdata";
-			const string IMG_FOLDER = $@"{APP_FOLDER}\images";
-			const string SETTINGS_IMG = $@"{IMG_FOLDER}\MoonSettings.png";
-			const string LAUNCHER_BEHAVIOURS_FOLDER = "launcher settings";
-			const string AUTO_RUN_FILE = $@"{LAUNCHER_BEHAVIOURS_FOLDER}\autorun.bool";
-
-			const int GRID_WIDTH_EFFECTIVE = 12;
-			const int GRID_WIDTH_ACTUAL = GRID_WIDTH_EFFECTIVE * 2;
-			const int GRID_HEIGHT_EFFECTIVE = 6;
-			const int GRID_HEIGHT_ACTUAL = GRID_HEIGHT_EFFECTIVE * 2;
 
 			// Dynamic Window Scaling and Positioning
 			double screenHeight = SystemParameters.PrimaryScreenHeight;
 			double screenWidth = SystemParameters.PrimaryScreenWidth;
 			Width = Math.Min(screenWidth * 0.4, 980);
-			Height = Math.Min(screenHeight * 0.35, 500);
+			Height = Math.Min(screenHeight * 0.4, 580);
 			Left = (screenWidth / 2) - (Width / 2);
 			Top = screenHeight - Height - 48;
 
 			// Directory Creation
 			Directory.CreateDirectory(IMG_FOLDER);
-			Directory.CreateDirectory(LAUNCHER_BEHAVIOURS_FOLDER);
+			Directory.CreateDirectory(LAUNCHER_SETTINGS_FOLDER);
 
-			// Registry Key To Auto-Run On Startup If Auto-Run Is Set To True In Launcher Behaviours Folder
-			SetAutoLaunch(AUTO_RUN_FILE);
+			// Load Application Data From Directories
+			Load();
+
+			// Add Images To Settings Buttons
+			CreateSettingsBarImages();
+			launcherSettingsBtn.Background = SetImage(APP_SETTINGS_IMG);
+			launcherSettingsBtn.Content = "";
+
+			// Auto Minimize Window When Done
+			WindowState = WindowState.Minimized;
+		}
+
+		// Loads Application Data Onto Application
+		private void Load() {
+			// Registry Key To Auto-Run On Startup If Auto-Run Is Set To True In Launcher Settings Folder
+			SetAutoLaunch(AUTORUN_FILE);
 
 			// Load Files
-			string[] files = GetNonExampleFile(APP_FOLDER, EXAMPLE_FILE, SETTINGS_FILE, SETTINGS_IMG);
+			string[] files = GetNonExampleFile(APP_FOLDER, EXAMPLE_FILE);
 
 			// Check Directory For Files
-			if (files.Length < 2) {
+			if (files.Length < 1) {
 				// Creates Error Message And Opens File Explorer To Directory On Click
 				ErrorMessage(gridContainer, APP_FOLDER, [
 					"Please add an .appdata file.",
@@ -88,7 +102,7 @@ namespace WulffrithLauncher {
 			string[] imgFiles = Directory.GetFiles(IMG_FOLDER);
 
 			// Checks Images Have Been Loaded
-			if (imgFiles.Length < 2) {
+			if (imgFiles.Length < 1) {
 				// Error Message
 				ErrorMessage(gridContainer, IMG_FOLDER, [
 					"No images have been loaded.",
@@ -102,9 +116,11 @@ namespace WulffrithLauncher {
 
 			// Adds Icons To Grid
 			FillGrid(gridIcons, files, filesData, imgFiles, GRID_WIDTH_ACTUAL, GRID_HEIGHT_ACTUAL, gridContainer, APP_FOLDER, IMG_FOLDER);
+		}
 
-			// Auto Minimize Window When Done
-			WindowState = WindowState.Minimized;
+		// Creates Settings Bar Images
+		private void CreateSettingsBarImages() {
+			File.WriteAllBytes(APP_SETTINGS_IMG, ImageDataManager.GetSettingImgBytes());
 		}
 
 		// Creates autorun file if not exist and sets app to autorun on startup if file value is true
@@ -141,10 +157,8 @@ namespace WulffrithLauncher {
 			WindowState = WindowState.Minimized;
 		}
 
-		// TO DO: Refresh Button That Clears Icon Grid And Calls All Loading Methods Again
-
 		// Creates example files with format reference
-		private static void CreateExampleFiles(string appFolder, string exampleFile, string settingsFile, string imgFile) {
+		private static void CreateExampleFile(string appFolder, string exampleFile) {
 			MyLib.File.WriteAllLines(exampleFile, [
 				"Application Name (Doesn't have to be accurate. It's used for a tooltip.) > Example App",
 				"Image Name (Most bitmap image formats work. Does not animate yet.) > example.png",
@@ -152,27 +166,17 @@ namespace WulffrithLauncher {
 				@$"Path (Can be any file location, directory, url, etc. This is what gets launched when you click the icon.) > {exampleFile}",
 				"Command Line Arguments > Arguments you want to launch the the app with, like loading an image onto mspaint.exe. Leave empty for no arguments."
 			]);
-
-			MyLib.File.WriteAllLines(settingsFile, [
-				"Application Name > Launcher Settings",
-				"Image Name > MoonSettings.png",
-				"Panel Size > Small",
-				@$"Directory > {appFolder}",
-				"Arguements > "
-			]);
-
-			File.WriteAllBytes(imgFile, ImageDataManager.GetSettingImgBytes());
 		}
 
 		// Gets all file locations excluding the example files
-		private static string[] GetNonExampleFile(string appFolder, string exampleFile, string settingsFile, string imgFile) {
+		private static string[] GetNonExampleFile(string appFolder, string exampleFile) {
 			if (File.Exists(exampleFile)) {
 				File.Delete(exampleFile);
 			}
 
 			string[] files = Directory.GetFiles(appFolder);
 
-			CreateExampleFiles(appFolder, exampleFile, settingsFile, imgFile);
+			CreateExampleFile(appFolder, exampleFile);
 
 			return files;
 		}
@@ -216,10 +220,10 @@ namespace WulffrithLauncher {
 			}
 
 			// Checks if count does not surpass max allowed apps
-			if (count < width * height) {
-				isValid = true;
-			} else {
+			if (count > width * height) {
 				isValid = false;
+			} else {
+				isValid = true;
 			}
 
 			// Returns FileDatas
@@ -253,7 +257,12 @@ namespace WulffrithLauncher {
 
 		// Returns New ImageBrush With Image For Background Images
 		private ImageBrush SetImage(string path) {
-			return new ImageBrush(new BitmapImage(new Uri(path, UriKind.RelativeOrAbsolute)));
+			BitmapImage img = new();
+			img.BeginInit();
+			img.UriSource = new Uri(path, UriKind.RelativeOrAbsolute);
+			img.CacheOption = BitmapCacheOption.OnLoad;
+			img.EndInit();
+			return new ImageBrush(img);
 		}
 
 		// Fills Grid
@@ -413,6 +422,28 @@ namespace WulffrithLauncher {
 				_height = 1;
 				return this;
 			}
+		}
+
+		// Use This For App Settings Instead Of AppData
+		private void appSettingsBtn_Click(object sender, RoutedEventArgs e) {
+			MyLib.File.Open(APP_FOLDER);
+		}
+
+		// Closes Launcher When Force Quit Button Clicked
+		private void forceQuitBtn_Click(object sender, RoutedEventArgs e) {
+			Environment.Exit(0);
+		}
+
+		// Opens Launcher Settings Folder When Button Clicked
+		private void launcherSettingsBtn_Click(object sender, RoutedEventArgs e) {
+			MyLib.File.Open(LAUNCHER_SETTINGS_FOLDER);
+		}
+
+		// Refresh Button Method That Clears Icon Grid And Calls All Loading Methods Again
+		private void refreshBtn_Click(object sender, RoutedEventArgs e) {
+			gridIcons.Children.Clear();
+
+			Load();
 		}
 	}
 }

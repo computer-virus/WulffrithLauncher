@@ -31,9 +31,9 @@ I worked really hard on this so I hope you like the launcher and can make some u
 - Added Launcher Icon
 - Added Ability For Launcher To Open Certain File Types Directly
 - Switched To Reactive App Validation To Allow Greater Freedom And Simplicity For The User
-- Launcher Makes Launcher Settings App For User By Default
 - User Can Modify App Data and Image Data By Right-Clicking Icon
 - Auto-run On Startup Compatibility
+- Added Launcher Settings Bar
 
 ### Possible Future Implementations (If I Get To Them):
 - Add manual launcher window scaling through in-app menu
