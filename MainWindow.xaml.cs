@@ -16,7 +16,7 @@ namespace WulffrithLauncher {
 		private const string APP_FOLDER = "apps";
 		private const string EXAMPLE_FILE = $@"{APP_FOLDER}\## - ExampleApplication.appdata";
 		private const string IMG_FOLDER = $@"{APP_FOLDER}\images";
-		private const string APP_SETTINGS_IMG = $@"{IMG_FOLDER}\MoonSettings.png";
+		private const string APP_SETTINGS_IMG = $@"{IMG_FOLDER}\Settings.png", REFRESH_IMG = $@"{IMG_FOLDER}\Refresh.png";
 		private const string LAUNCHER_SETTINGS_FOLDER = "launcher settings";
 		private const string AUTORUN_FILE = $@"{LAUNCHER_SETTINGS_FOLDER}\autorun.bool";
 
@@ -48,6 +48,8 @@ namespace WulffrithLauncher {
 			CreateSettingsBarImages();
 			launcherSettingsBtn.Background = SetImage(APP_SETTINGS_IMG);
 			launcherSettingsBtn.Content = "";
+			refreshBtn.Background = SetImage(REFRESH_IMG);
+			refreshBtn.Content = "";
 
 			// Auto Minimize Window Because It Was Launched Using AutoRun
 			if (autorun) {
@@ -125,6 +127,7 @@ namespace WulffrithLauncher {
 		// Creates Settings Bar Images
 		private void CreateSettingsBarImages() {
 			File.WriteAllBytes(APP_SETTINGS_IMG, ImageDataManager.GetSettingImgBytes());
+			File.WriteAllBytes(REFRESH_IMG, ImageDataManager.GetRefreshImgBytes());
 		}
 
 		// Creates autorun file if not exist and sets app to autorun on startup if file value is true
