@@ -1,11 +1,9 @@
-﻿using Microsoft.Win32;
-using System.IO;
+﻿using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using MyLibrary;
-using System.Diagnostics;
 
 namespace WulffrithLauncher {
 	/// <summary>
@@ -43,7 +41,7 @@ namespace WulffrithLauncher {
 			Directory.CreateDirectory(LAUNCHER_SETTINGS_FOLDER);
 
 			// Load Application Data From Directories
-			bool autorun = Load();
+			Load();
 
 			// Add Images To Settings Buttons
 			CreateSettingsBarImages();
@@ -55,18 +53,10 @@ namespace WulffrithLauncher {
 			appSettingsBtn.Content = "";
 			forceQuitBtn.Background = SetImage(FORCE_QUIT_IMG);
 			forceQuitBtn.Content = "";
-
-			// Auto Minimize Window Because It Was Launched Using AutoRun
-			if (autorun) {
-				WindowState = WindowState.Minimized;
-			}
 		}
 
 		// Loads Application Data Onto Application
-		private bool Load() {
-			// Registry Key To Auto-Run On Startup If Auto-Run Is Set To True In Launcher Settings Folder
-			bool autorun = GetAutoLaunch(AUTORUN_FILE);
-
+		private void Load() {
 			// Load Files
 			string[] files = GetNonExampleFile(APP_FOLDER, EXAMPLE_FILE);
 
@@ -87,7 +77,7 @@ namespace WulffrithLauncher {
 				]);
 
 				// Returns Early
-				return false;
+				return;
 			}
 
 			// Load File Datas
@@ -104,7 +94,7 @@ namespace WulffrithLauncher {
 				]);
 
 				// Returns Early
-				return false;
+				return;
 			}
 
 			// Get Images From Image Directory
@@ -120,51 +110,21 @@ namespace WulffrithLauncher {
 				]);
 
 				// Returns early
-				return false;
+				return;
 			}
 
 			// Adds Icons To Grid
 			FillGrid(gridIcons, files, filesData, imgFiles, GRID_WIDTH_ACTUAL, GRID_HEIGHT_ACTUAL, gridContainer, APP_FOLDER, IMG_FOLDER);
 
-			return autorun;
+			return;
 		}
 
 		// Creates Settings Bar Images
 		private void CreateSettingsBarImages() {
-			File.WriteAllBytes(SETTINGS_IMG, ImageDataManager.GetSettingsImgBytes());
-			File.WriteAllBytes(REFRESH_IMG, ImageDataManager.GetRefreshImgBytes());
-			File.WriteAllBytes(APP_SETTINGS_IMG, ImageDataManager.GetAppSettingsImgBytes());
-			File.WriteAllBytes(FORCE_QUIT_IMG, ImageDataManager.GetForceQuitImgBytes());
-		}
-
-		// Creates autorun file if not exist and sets app to autorun on startup if file value is true
-		private bool GetAutoLaunch(string file) {
-			// Default is false
-			bool autorun = false;
-
-			// Set based on file
-			if (File.Exists(file)) {
-				string[] data = File.ReadAllLines(file);
-				try {
-					autorun = bool.Parse(data[0]);
-				} catch {
-					MyLib.File.WriteAllLines(file, ["" + autorun]);
-				}
-			} else {
-				MyLib.File.WriteAllLines(file, ["" + autorun]);
-			}
-
-			// If true, create Registry Key and Set Value
-			string appName = "WulffrithLauncher";
-			string? execPath = Environment.ProcessPath;
-			RegistryKey? reg = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
-			if (autorun && execPath != null) {
-				reg?.SetValue(appName, execPath);
-				reg?.Close();
-			} else {
-				reg?.DeleteValue(appName, false);
-			}
-			return autorun;
+			System.IO.File.WriteAllBytes(SETTINGS_IMG, ImageDataManager.GetSettingsImgBytes());
+			System.IO.File.WriteAllBytes(REFRESH_IMG, ImageDataManager.GetRefreshImgBytes());
+			System.IO.File.WriteAllBytes(APP_SETTINGS_IMG, ImageDataManager.GetAppSettingsImgBytes());
+			System.IO.File.WriteAllBytes(FORCE_QUIT_IMG, ImageDataManager.GetForceQuitImgBytes());
 		}
 
 		// Minimizes application when unfocused
@@ -185,8 +145,8 @@ namespace WulffrithLauncher {
 
 		// Gets all file locations excluding the example files
 		private static string[] GetNonExampleFile(string appFolder, string exampleFile) {
-			if (File.Exists(exampleFile)) {
-				File.Delete(exampleFile);
+			if (System.IO.File.Exists(exampleFile)) {
+				System.IO.File.Delete(exampleFile);
 			}
 
 			string[] files = Directory.GetFiles(appFolder);
@@ -205,7 +165,7 @@ namespace WulffrithLauncher {
 			string[][] filesData = new string[files.Length][];
 			for (int i = 0; i < files.Length; i++) {
 				// Reads File
-				string[] lines = File.ReadAllLines(files[i]);
+				string[] lines = System.IO.File.ReadAllLines(files[i]);
 
 				// Creates Array To Hold File Datas
 				filesData[i] = new string[lines.Length];
@@ -358,7 +318,7 @@ namespace WulffrithLauncher {
 
 			// Background
 			string imageFile = $@"{imgFolder}\{fileData[1]}";
-			if (File.Exists(imageFile)) {
+			if (System.IO.File.Exists(imageFile)) {
 				btn.Background = SetImage(imageFile);
 			} else {
 				btn.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#ff0000") ?? new());
